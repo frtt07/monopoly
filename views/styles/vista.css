@@ -1,3 +1,13 @@
+/*Color de fondo del navbar*/
+.custom-navbar {
+    background: linear-gradient(90deg, #c0392b, #27ae60) !important;
+}
+
+/*Ajusta el logo del navbar*/
+.navbar-brand img {
+    height: 60px;
+    width: auto;
+}
 .tablero {
   border-collapse: collapse;
   margin: 20px auto;
@@ -98,6 +108,7 @@
 .empty {
   border: none;
 }
+
 
 
 
