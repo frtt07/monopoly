@@ -54,7 +54,7 @@
 }
 .top span {
   display: block;
-  transform: rotate(180deg); /* voltear texto */
+ /* voltear texto */
 }
 
 /* Vertical izquierda */
@@ -72,7 +72,6 @@
 }
 .left span {
   display: block;
-  transform: rotate(90deg);
   transform-origin: center;
 }
 
@@ -91,7 +90,7 @@
 }
 .right span {
   display: block;
-  transform: rotate(-90deg);
+  
   transform-origin: center;
 }
 
