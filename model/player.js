@@ -9,5 +9,4 @@ class Player {
         this.inJail = inJail;
         this.jailTurns = jailTurns
     }
-    
 }
