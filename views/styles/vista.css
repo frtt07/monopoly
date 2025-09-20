@@ -1,3 +1,20 @@
+.container{
+    font-family:Georgia, 'Times New Roman', Times, serif;
+    text-align: center;
+}
+
+.final-pagina {
+    text-align: center;
+    background-color: #c31c1c;
+    color: #fff;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+
+
+
 /*Color de fondo del navbar*/
 .custom-navbar {
     background: linear-gradient(90deg, #c0392b, #27ae60) !important;
