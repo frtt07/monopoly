@@ -27,6 +27,21 @@
     background-color: transparent;
 }
 
+.imagenInterrogacion{
+    height: 120px;
+    width: 180px;
+    margin: 75px 200px 50px 375px; /* arriba, derecha, abajo, izquierda */
+    transform: rotate(-20deg);
+    border: dotted;
+}
+.imagenFortuna{
+    height: 150px;
+    width: 180px;
+    margin: 50px 100px 10px 50px; /* arriba, derecha, abajo, izquierda */
+    transform: rotate(130deg);
+    border: dotted;
+}
+
 
 
 

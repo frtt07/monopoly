@@ -13,12 +13,23 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .then(boardData => {
                 tablero.innerHTML = "";
-
+                
                 const casillasBottom = boardData.bottom;
                 const casillasLeft = boardData.left;
                 const casillasTop = boardData.top;
                 const casillasRight = boardData.right;
 
+                 // --- CHANCE y community_chest (fila 2 --->fila 10, columna 2 --> columna 10)
+                const centro = document.createElement("div");
+                centro.classList.add("centro");
+                centro.innerHTML = `<img src="/assets/imgs/fortuna.png" alt="" class="imagenFortuna">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTFPiLwxLH8BbOoX_dM4pbj070os1ZH9P3tA&s" class="d-block mx-auto" alt="">
+                <img src="/assets/imgs/interrogacion.png" alt="" class="imagenInterrogacion">
+                `; 
+                tablero.appendChild(centro);
+                centro.style.gridRow = "2 / 11";
+                centro.style.gridColumn = "2 / 11";
+                 
                 // ---- BOTTOM (fila 11, columnas 11 → 1)
                 for (let i = 0; i < casillasBottom.length; i++) {
                     const casilla = crearCasilla(casillasBottom[i]);
@@ -50,7 +61,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     casilla.style.gridRow = (i + 2);
                     tablero.appendChild(casilla);
                 }
-
                 console.log("Se cargaron todas las casillas en los 4 lados.");
             })
     });
@@ -65,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
         `;
 
         casillaDiv.classList.add("casilla");
-        
+
         if (data.color) {
             casillaDiv.classList.add(data.color);
         }
