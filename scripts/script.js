@@ -66,7 +66,7 @@ function generarJugadores(n) {
             botonIniciar.className = "BottonDeInicio btn btn-outline-success btn-lg";
             botonIniciar.textContent = "Iniciar Juego";
             botonIniciar.onclick = function () {
-                alert("Welcome Monopoly");
+                window.location.href = "/views/monopoly.html";
             };
             iniciar.appendChild(botonIniciar);
         })
