@@ -66,6 +66,21 @@ function generarJugadores(n) {
             botonIniciar.className = "BottonDeInicio btn btn-outline-success btn-lg";
             botonIniciar.textContent = "Iniciar Juego";
             botonIniciar.onclick = function () {
+                const jugadoresData = [];
+
+            for (let i = 1; i <= n; i++) {
+                const nick = document.getElementById(`nick-${i}`).value;
+                const pais = document.getElementById(`pais-${i}`).value;
+
+                jugadoresData.push({
+                    nick: nick,
+                    pais: pais
+                });
+            }
+
+            // Aqui esta el numero de jugadores guardados
+            localStorage.setItem("jugadores", JSON.stringify(jugadoresData));
+
                 window.location.href = "/views/monopoly.html";
             };
             iniciar.appendChild(botonIniciar);
