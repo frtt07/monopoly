@@ -1,3 +1,5 @@
+import Player from "./model/player.js";
+
 document.addEventListener("DOMContentLoaded", function () {
     let btnCargarCasillas = document.getElementById("btnCargarCasillas");
 
