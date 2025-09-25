@@ -22,23 +22,25 @@
 }
 
 .casilla-color {
-    width: 100%;    
-    height: 20px;     
+    width: 100%;
+    height: 20px;
     background-color: transparent;
 }
 
-.imagenInterrogacion{
+.imagenInterrogacion {
     height: 120px;
     width: 180px;
-    margin: 75px 200px 50px 375px; /* arriba, derecha, abajo, izquierda */
+    margin: 75px 200px 50px 375px;
+    /* arriba, derecha, abajo, izquierda */
     transform: rotate(-20deg);
     border: dotted;
 }
 
-.imagenFortuna{
+.imagenFortuna {
     height: 150px;
     width: 180px;
-    margin: 50px 100px 10px 50px; /* arriba, derecha, abajo, izquierda */
+    margin: 50px 100px 10px 50px;
+    /* arriba, derecha, abajo, izquierda */
     transform: rotate(130deg);
     border: dotted;
 }
@@ -50,6 +52,25 @@
     border-radius: 50%;
 }
 
+#acciones {
+    min-width: 200px;
+    padding: 15px;
+    background: #f8f9fa;
+    border: 2px solid #333;
+    border-radius: 10px;
+}
 
+#acciones h3 {
+    text-align: center;
+    margin-bottom: 15px;
+}
 
+#acciones button {
+    width: 100%;
+    margin-bottom: 10px;
+}
 
+#btnComprarPropiedad {
+    background-color: #24913d;
+    color: white;
+}
