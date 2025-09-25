@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch("http://127.0.0.1:5000/board")
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Fallas en el sistema...');
+                    throw new Error('Fallo al correr el JSON');
                 }
                 return response.json();
             })
@@ -19,17 +19,23 @@ document.addEventListener("DOMContentLoaded", function () {
                 const casillasTop = boardData.top;
                 const casillasRight = boardData.right;
 
-                 // --- CHANCE y community_chest (fila 2 --->fila 10, columna 2 --> columna 10)
+                // --- Centro del tablero (chance y community chest)
                 const centro = document.createElement("div");
                 centro.classList.add("centro");
-                centro.innerHTML = `<img src="/assets/imgs/fortuna.png" alt="" class="imagenFortuna">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTFPiLwxLH8BbOoX_dM4pbj070os1ZH9P3tA&s" class="d-block mx-auto" alt="">
-                <img src="/assets/imgs/interrogacion.png" alt="" class="imagenInterrogacion">
+                centro.innerHTML = `
+                    <img src="/assets/imgs/fortuna.png" alt="" class="imagenFortuna">
+                    <button id="btnDado">Tirar Dado</button>
+                    <div id="resultado"></div>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTFPiLwxLH8BbOoX_dM4pbj070os1ZH9P3tA&s" class="d-block mx-auto" alt="">
+                    <img src="/assets/imgs/interrogacion.png" alt="" class="imagenInterrogacion">
                 `; 
                 tablero.appendChild(centro);
                 centro.style.gridRow = "2 / 11";
                 centro.style.gridColumn = "2 / 11";
-                 
+
+                
+                document.getElementById("btnDado").addEventListener("click", tirareldado);
+
                 // ---- BOTTOM (fila 11, columnas 11 → 1)
                 for (let i = 0; i < casillasBottom.length; i++) {
                     const casilla = crearCasilla(casillasBottom[i]);
@@ -61,10 +67,15 @@ document.addEventListener("DOMContentLoaded", function () {
                     casilla.style.gridRow = (i + 2);
                     tablero.appendChild(casilla);
                 }
-                console.log("Se cargaron todas las casillas en los 4 lados.");
+
+                console.log(" Se cargaron todas las casillas en los 4 lados.");
             })
+            .catch(error => {
+                console.error(" Error cargando el tablero:", error);
+            });
     });
 
+    
     function crearCasilla(data) {
         const casillaDiv = document.createElement("div");
 
@@ -80,5 +91,12 @@ document.addEventListener("DOMContentLoaded", function () {
             casillaDiv.classList.add(data.color);
         }
         return casillaDiv;
+    }
+
+    //Tirar el dado
+    function tirareldado() {
+        const numero = Math.floor(Math.random() * 12) + 1;
+        const resultado = document.getElementById("resultado");
+        resultado.innerHTML = `<h1>El número es ${numero}</h1>`;
     }
 });
