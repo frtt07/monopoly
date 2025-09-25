@@ -1,4 +1,5 @@
-import PropertyTile from "./propertyTile.js";
+import {PropertyTile} from "./propertyTile.js";
+import  {RileRoadTile}  from "./rileRoadTile.js";   
 
 class Player {
     constructor(nickname, country, balance = 1500, opositin = 0, properties = [], inJail = false, jailTurns = 0,) {
@@ -9,7 +10,7 @@ class Player {
 
         //validar que cada elemento sea instancia de PropertyTile
         properties.forEach((prop, i) => {
-            if (!(prop instanceof PropertyTile)) {
+            if (!(prop instanceof PropertyTile || prop instanceof RileRoadTile)) {
                 throw new TypeError(`Elemento en properties[${i}] no es PropertyTile`);
             }
         });

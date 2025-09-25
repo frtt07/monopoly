@@ -79,9 +79,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const casillaDiv = document.createElement("div");
 
         casillaDiv.innerHTML = `
+            <div id="${data.id}">
             <div class="casilla-color" style="background-color:${data.color || 'transparent'}"></div>
             <div class="casilla-nombre">${data.name}</div>
             <div class="casilla-precio">${data.price ? `$${data.price}` : ''}</div>
+            </div>
         `;
 
         casillaDiv.classList.add("casilla");
