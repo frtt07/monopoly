@@ -1,8 +1,7 @@
 import PropertyTile from "./propertyTile.js";
 
 class Player {
-
-    constructor(nickname, country, balance = 1500, position = 0, properties = [], inJail = false, jailTurns = 0,) {
+    constructor(nickname, country, balance = 1500, opositin = 0, properties = [], inJail = false, jailTurns = 0,) {
         // Validación que sea un array
         if (!Array.isArray(properties)) {
             throw new TypeError("properties debe ser un array de PropertyTile");
