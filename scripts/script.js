@@ -65,9 +65,33 @@ function generarJugadores(n) {
             const botonIniciar = document.createElement("button");
             botonIniciar.className = "BottonDeInicio btn btn-outline-success btn-lg";
             botonIniciar.textContent = "Iniciar Juego";
+
             botonIniciar.onclick = function () {
+                const dataJugadores = [];
+
+                for (let i = 1; i <= n; i++) {
+                    const nick = document.getElementById(`nick-${i}`).value.trim();
+                    const pais = document.getElementById(`pais-${i}`).value;
+
+                    if (!nick || !pais) {
+                        alert(`Por favor completa los datos del Jugador ${i}`);
+                        return; // corta la ejecución si falta algo
+                    }
+
+                    dataJugadores.push({
+                        id: i,
+                        nickname: nick,
+                        pais: pais
+                    });
+                }
+
+                // Guardar en localStorage
+                localStorage.setItem("jugadores", JSON.stringify(dataJugadores));
+
+                // Redirigir al tablero
                 window.location.href = "/views/monopoly.html";
             };
+
             iniciar.appendChild(botonIniciar);
         })
         .catch(error => console.error("Error cargando países:", error));

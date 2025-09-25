@@ -69,6 +69,7 @@ class Player {
         }
         this.properties.push(property);
     }
+
     removeProperty(propertyId) {
         const index = this.properties.findIndex(prop => prop.getId() === propertyId);
         if (index !== -1) {
@@ -77,6 +78,7 @@ class Player {
             throw new Error(`No se encontró la propiedad con id: ${propertyId}`);
         }
     }
+    
     updateBalance(amount) {
         if (typeof amount !== 'number') {
             throw new TypeError('amount debe ser de tipo number');
