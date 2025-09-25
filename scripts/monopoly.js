@@ -1,7 +1,17 @@
 document.addEventListener("DOMContentLoaded", function () {
+
+    // Recuperar jugadores guardados en localStorage
+    let jugadores = JSON.parse(localStorage.getItem("jugadores")) || [];
+
+    // Guardarlos en una variable global para usarlos en todo el juego
+    window.jugadores = jugadores;
+
+    console.log("Jugadores disponibles:", window.jugadores);
+
     let btnCargarCasillas = document.getElementById("btnCargarCasillas");
 
     btnCargarCasillas.addEventListener("click", function () {
+
         let tablero = document.getElementById("tablero");
 
         fetch("http://127.0.0.1:5000/board")
