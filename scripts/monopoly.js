@@ -163,5 +163,4 @@ document.addEventListener("DOMContentLoaded", function () {
     turno = (turno + 1) % window.jugadores.length;
 }
 
-
 });
