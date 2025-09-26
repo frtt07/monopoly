@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let btnCargarCasillas = document.getElementById("btnCargarCasillas");
 
     btnCargarCasillas.addEventListener("click", function () {
-
+        document.getElementById("btnCargarCasillas").classList.add("d-none");
         let tablero = document.getElementById("tablero");
 
         fetch("http://127.0.0.1:5000/board")
