@@ -11,37 +11,37 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
        
     <link rel="stylesheet" href="/views/styles/monopoly.css">
+    <link rel="stylesheet" href="styles\vista.css">
        
     <script src="/scripts/monopoly.js" defer></script>
 </head>
 
 <body>
-    <button id="btnCargarCasillas" class="btn btn-primary container-fluid">Iniciar Juego</button>
-    <div id="tablero"></div>
-
-    <!-- Botón para abrir -->
-    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#demoSidebar">
-    Abrir menú
-    </button>
-
-    <!-- El panel lateral -->
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="demoSidebar">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title">Menú de Juego</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-    </div>
-    <div class="offcanvas-body">
-        <div id="acciones" class="d-flex flex-column gap-2">
-            <h3>Acciones</h3>
-            <button id="btnComprarPropiedad" class="btn btn">Comprar Propiedad</button>
-            <button id="btnComprarCasa" class="btn btn-success">Comprar Casa</button>
-            <button id="btnVenderPropiedad" class="btn btn-danger">Vender Propiedad</button>
-            <button id="btnHipotecar" class="btn btn-warning">Hipotecar</button>
-            <button id="btnTerminarTurno" class="btn btn-secondary">Terminar Turno</button>
+    <div class="container-fluid">
+            <button id="btnCargarCasillas" class="btn btn-primary container-fluid">Iniciar Juego</button>
+            <div id="tablero"></div>
+        <!-- Botón para abrir -->
+        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#demoSidebar">
+            Abrir menú
+        </button>
+        <!-- El panel lateral -->
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="demoSidebar">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title">Menú de Juego</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div id="acciones" class="d-flex flex-column gap-2">
+                    <h3>Acciones</h3>
+                    <button id="btnComprarPropiedad" class="btn btn">Comprar Propiedad</button>
+                    <button id="btnComprarCasa" class="btn btn-success">Comprar Casa</button>
+                    <button id="btnVenderPropiedad" class="btn btn-danger">Vender Propiedad</button>
+                    <button id="btnHipotecar" class="btn btn-warning">Hipotecar</button>
+                    <button id="btnTerminarTurno" class="btn btn-secondary">Terminar Turno</button>
+                </div>
+            </div>
         </div>
     </div>
-    </div>
-
     <!-- Necesitas este script de Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
