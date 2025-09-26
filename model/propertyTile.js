@@ -1,4 +1,4 @@
-class PropertyTile {
+export class PropertyTile {
     constructor(color, id, mortage, name, price, rent, type, houses = 0, hotels = 0) {
         //Validaciones de tipo de dato
         if (typeof color !== 'string' || color.trim() === '') {
