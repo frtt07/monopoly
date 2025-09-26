@@ -1,8 +1,8 @@
-import PropertyTile from "./propertyTile.js";
+import {PropertyTile} from "./propertyTile.js";
+import  {RileRoadTile}  from "./rileRoadTile.js";   
 
 class Player {
-
-    constructor(nickname, country, balance = 1500, position = 0, properties = [], inJail = false, jailTurns = 0,) {
+    constructor(nickname, country, balance = 1500, opositin = 0, properties = [], inJail = false, jailTurns = 0,) {
         // Validación que sea un array
         if (!Array.isArray(properties)) {
             throw new TypeError("properties debe ser un array de PropertyTile");
@@ -10,7 +10,7 @@ class Player {
 
         //validar que cada elemento sea instancia de PropertyTile
         properties.forEach((prop, i) => {
-            if (!(prop instanceof PropertyTile)) {
+            if (!(prop instanceof PropertyTile || prop instanceof RileRoadTile)) {
                 throw new TypeError(`Elemento en properties[${i}] no es PropertyTile`);
             }
         });
@@ -69,6 +69,7 @@ class Player {
         }
         this.properties.push(property);
     }
+
     removeProperty(propertyId) {
         const index = this.properties.findIndex(prop => prop.getId() === propertyId);
         if (index !== -1) {
@@ -77,6 +78,7 @@ class Player {
             throw new Error(`No se encontró la propiedad con id: ${propertyId}`);
         }
     }
+    
     updateBalance(amount) {
         if (typeof amount !== 'number') {
             throw new TypeError('amount debe ser de tipo number');
