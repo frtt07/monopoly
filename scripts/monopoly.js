@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <p>Total: <b>${numero}</b></p>
             <p>Casilla actual: ${jugador.posicion}</p>
         </div>
-    `;
+        `;
 
         // Pasar turno al siguiente jugador
         turno = (turno + 1) % window.jugadores.length;

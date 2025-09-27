@@ -1,5 +1,5 @@
 import { Player } from "./player.js"
-import PropertyTile from "./propertyTile.js";
+import PropertyTile from "./tiles/propertyTile.js";
 
 class Game {
 
@@ -21,29 +21,33 @@ document.addEventListener("DOMContentLoaded", () => {
     listarPropiedades();
     let propiedades = [];
 
-    function listarPropiedades() {
-        fetch('http://127.0.0.1:5000/board')
-            .then(response => response.json())
-            .then(data => {
-                console.log("Propiedades:", data);
+    async function listarPropiedades() {
+        const response = await fetch('http://127.0.0.1:5000/board');
+        const respuestaJSON = await response.json();
+        console.log(respuestaJSON);
 
-                // Unir todas las casillas en un solo array
-                const allTiles = [
-                    ...data.bottom,
-                    ...data.top,
-                    ...data.left,
-                    ...data.right
-                ];
+        const allTiles = [
+            ...respuestaJSON.bottom
+            , ...respuestaJSON.left
+            , ...respuestaJSON.top
+            , ...respuestaJSON.right
+        ]
 
-                // Filtrar solo propiedades y railroads
-                propiedades = allTiles
-                    .filter(item => item.type === "property" || item.type === "railroad")
-                    .map(item => new PropertyTile(item.id, item.name, item.color));
+        console.log("allTiles:", allTiles);
+        // Filtrar solo respuestaJSON y railroads
+        propiedades = allTiles
+            .filter(item => item.type === "property" || item.type === "railroad")
+            .map(item => {
+                if (item.color === undefined) item.color = "whithe";
+                const propiedad = new PropertyTile(item.id, item.color, item.name, item.type);
+                if (item.rent) propiedad.setRent(item.rent);
+                if (item.price) propiedad.setPrice(item.price); 
+                if (item.action) propiedad.setAction(item.action);
+                if (item.mortage) propiedad.setMortage(item.mortage);
 
-                console.log("Propiedades cargadas:", propiedades);
-                console.log(propiedades[0].toJSON());
-            })
-            .catch(error => console.error('Error al cargar las propiedades:', error));
+                return propiedad;
+            });
+
+        console.log("propiedades:", propiedades);
     }
-});
-;
+})

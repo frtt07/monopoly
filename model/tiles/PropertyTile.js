@@ -1,41 +1,37 @@
-export class PropertyTile {
-    constructor(color, id, mortage, name, price, rent, type, houses = 0, hotels = 0) {
-        //Validaciones de tipo de dato
+import { Tile } from "./tile.js";
+
+export class PropertyTile extends Tile  {
+    constructor(id, color, name, type) {
+        super(id, name, type);
         if (typeof color !== 'string' || color.trim() === '') {
             throw new TypeError('color debe de ser de tipo string');
         }
-        if (typeof id !== 'string' || id.trim() === '') {
-            throw new TypeError('id debe de ser de tipo string');
-        }
-        if (typeof mortage !== 'number' || mortage < 0) {
-            throw new TypeError('mortage debe de ser de tipo number');
+        if (typeof id !== 'number' || id < 0) {
+            throw new TypeError('id debe de ser de tipo number');
         }
         if (typeof name !== 'string' || name.trim() === '') {
             throw new TypeError('name debe de ser de tipo string');
-        }
-        if (typeof price !== 'number' || price < 0) {
-            throw new TypeError('price debe de ser de tipo number');
-        }
-        if (typeof rent !== 'number' || rent < 0) {
-            throw new TypeError('rent debe de ser de tipo number');
         }
         if (typeof type !== 'string' || type.trim() === '') {
             throw new TypeError('type debe de ser de tipo string');
         }
 
         this.color = color.trim();
-        this.id = id.trim();
-        this.mortage = mortage;
-        this.name = name.trim();
-        this.price = price;
-        this.rent = {
-            base: rent.base,
-            withHotel: rent.withHotel,
-            withHouse: [...rent.withHouse]
-        };
-        this.type = type.trim();
-        this.houses = houses;
-        this.hotels = hotels;
+    }
+
+    rent = {
+        "base": 0,
+        "withHouse": [
+        ],
+        "withHotel": 0
+    }
+
+    mortage = false;
+    price = 0;
+    action = {}
+
+    onLand(player) {
+        console.log(`${player.getNickname()} ha caido en la casilla ${this.name}`);
     }
 
     getColor() {
@@ -59,6 +55,9 @@ export class PropertyTile {
     getType() {
         return this.type;
     }
+    getAction() {
+        return this.action;
+    }
 
     setColor(color) {
         if (typeof color !== 'string' || color.trim() === '') {
@@ -67,14 +66,14 @@ export class PropertyTile {
         this.color = color.trim();
     }
     setId(id) {
-        if (typeof id !== 'string' || id.trim() === '') {
+        if (typeof id !== 'number' || id < 0) {
             throw new TypeError('id debe de ser de tipo string');
         }
-        this.id = id.trim();
+        this.id = id;
     }
     setMortage(mortage) {
-        if (typeof mortage !== 'number' || mortage < 0) {
-            throw new TypeError('mortage debe de ser de tipo number');
+        if (typeof mortage !== 'boolean') {
+            throw new TypeError('mortage debe de ser de tipo boolean');
         }
         this.mortage = mortage;
     }
@@ -91,8 +90,8 @@ export class PropertyTile {
         this.price = price;
     }
     setRent(rent) {
-        if (typeof rent !== 'number' || rent < 0) {
-            throw new TypeError('rent debe de ser de tipo number');
+        if (rent == null || rent == undefined || rent == {}) {
+            throw new TypeError('rent no puede estar vacio');
         }
         this.rent = rent;
     }
@@ -102,4 +101,13 @@ export class PropertyTile {
         }
         this.type = type.trim();
     }
+
+    setAction(action) {
+        if (action == null || action == undefined || action == {}) {
+            throw new TypeError('action no puede estar vacio');
+        }
+        this.action = action;
+    }
+
+
 } export default PropertyTile;
