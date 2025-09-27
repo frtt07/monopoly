@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .then(boardData => {
                 tablero.innerHTML = "";
-                
+
                 const casillasBottom = boardData.bottom;
                 const casillasLeft = boardData.left;
                 const casillasTop = boardData.top;
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     <div id="resultado"></div>
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTFPiLwxLH8BbOoX_dM4pbj070os1ZH9P3tA&s" class="d-block mx-auto" alt="">
                     <img src="/assets/imgs/interrogacion.png" alt="" class="imagenInterrogacion">
-                `; 
+                `;
                 tablero.appendChild(centro);
                 centro.style.gridRow = "2 / 11";
                 centro.style.gridColumn = "2 / 11";
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 for (let i = 0; i < casillasBottom.length; i++) {
                     const casilla = crearCasilla(casillasBottom[i]);
                     casilla.style.gridRow = "11";
-                    casilla.style.gridColumn = (11 - i); 
+                    casilla.style.gridColumn = (11 - i);
                     tablero.appendChild(casilla);
                 }
 
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-    
+
     // --- FUNCIONES AUXILIARES ---
     function crearCasilla(data) {
         const casillaDiv = document.createElement("div");
@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
             ficha.innerText = jugador.nick; // 1,2,3,4
             ficha.setAttribute("data-id", jugador.id);
             ficha.setAttribute("title", `${jugador.nick} (${jugador.pais}) - $${jugador.score}`);
-            
+
             // Buscar casilla de salida
             let salida = document.getElementById("0");
             salida.appendChild(ficha);
@@ -127,40 +127,40 @@ document.addEventListener("DOMContentLoaded", function () {
     let turno = 0; // índice del jugador en turno
 
     function tirareldado() {
-    // Dos dados de 1 a 6
-    const dado1 = Math.floor(Math.random() * 6) + 1;
-    const dado2 = Math.floor(Math.random() * 6) + 1;
-    const numero = dado1 + dado2; // total entre 2 y 12
+        // Dos dados de 1 a 6
+        const dado1 = Math.floor(Math.random() * 6) + 1;
+        const dado2 = Math.floor(Math.random() * 6) + 1;
+        const numero = dado1 + dado2; // total entre 2 y 12
 
-    const resultado = document.getElementById("resultado");
-    let jugador = window.jugadores[turno];
+        const resultado = document.getElementById("resultado");
+        let jugador = window.jugadores[turno];
 
-    // Asegurar que el jugador tenga posicion inicial
-    if (jugador.posicion === undefined) {
-        jugador.posicion = 0;
-    }
+        // Asegurar que el jugador tenga posicion inicial
+        if (jugador.posicion === undefined) {
+            jugador.posicion = 0;
+        }
 
-    // Nueva posición
-    jugador.posicion = (jugador.posicion + numero) % 40; // 40 casillas
-    localStorage.setItem("jugadores", JSON.stringify(window.jugadores));
+        // Nueva posición
+        jugador.posicion = (jugador.posicion + numero) % 40; // 40 casillas
+        localStorage.setItem("jugadores", JSON.stringify(window.jugadores));
 
-    // Mover ficha
-    let ficha = document.querySelector(`.ficha[data-id="${jugador.id}"]`);
-    let nuevaCasilla = document.getElementById(jugador.posicion);
-    nuevaCasilla.appendChild(ficha);
+        // Mover ficha
+        let ficha = document.querySelector(`.ficha[data-id="${jugador.id}"]`);
+        let nuevaCasilla = document.getElementById(jugador.posicion);
+        nuevaCasilla.appendChild(ficha);
 
-    // Mostrar info en el centro
-    resultado.innerHTML = `
-    <div class="menu-ficha">
+        // Mostrar info en el centro
+        resultado.innerHTML = `
+        <div class="menu-ficha">
             <h3>🎲 Turno de: ${jugador.nick} (${jugador.pais})</h3>
             <p>Dado 1: ${dado1} 🎲 | Dado 2: ${dado2} 🎲</p>
             <p>Total: <b>${numero}</b></p>
             <p>Casilla actual: ${jugador.posicion}</p>
-    </div>
+        </div>
     `;
 
-    // Pasar turno al siguiente jugador
-    turno = (turno + 1) % window.jugadores.length;
-}
+        // Pasar turno al siguiente jugador
+        turno = (turno + 1) % window.jugadores.length;
+    }
 
 });
