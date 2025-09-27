@@ -1,3 +1,6 @@
+// script.js - MODIFICADO
+import Player from './model/player.js';
+
 function generarJugadores(n) {
     const jugadores = document.getElementById("recuadroJugador");
     const iniciar = document.getElementById("botonIniciar");
@@ -47,8 +50,8 @@ function generarJugadores(n) {
                     const name = countryObj[code];
 
                     const option = document.createElement("option");
-                    option.value = code;   // ej. "ad"
-                    option.textContent = name; // ej. "Andorra"
+                    option.value = name;   // Cambié code por name para que coincida con Player
+                    option.textContent = name;
                     select.appendChild(option);
                 });
 
@@ -75,18 +78,33 @@ function generarJugadores(n) {
 
                     if (!nick || !pais) {
                         alert(`Por favor completa los datos del Jugador ${i}`);
-                        return; // corta la ejecución si falta algo
+                        return;
                     }
 
-                    dataJugadores.push({
-                        id: i,
-                        nickname: nick,
-                        pais: pais
-                    });
+                    // Crear instancia de Player en lugar de objeto simple
+                    const nuevoJugador = new Player(
+                        nick,      // nickname
+                        pais,      // country
+                        1500,      // balance
+                        0,         // position
+                        [],        // properties
+                        false,     // inJail
+                        0          // jailTurns
+                    );
+
+                    dataJugadores.push(nuevoJugador);
                 }
 
-                // Guardar en localStorage
-                localStorage.setItem("jugadores", JSON.stringify(dataJugadores));
+                // Guardar en localStorage (convertir a objeto plano)
+                localStorage.setItem("jugadores", JSON.stringify(dataJugadores.map(jugador => ({
+                    nickname: jugador.getNickname(),
+                    country: jugador.getCountry(),
+                    balance: jugador.getBalance(),
+                    position: jugador.getPosition(),
+                    properties: jugador.getProperties(),
+                    inJail: jugador.getInJail(),
+                    jailTurns: jugador.getJailTurns()
+                }))));
 
                 // Redirigir al tablero
                 window.location.href = "/views/monopoly.html";
