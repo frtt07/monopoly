@@ -1,7 +1,7 @@
 import PropertyTile from "./propertyTile.js"; 
 import  {RileRoadTile}  from "./rileRoadTile.js";   
 
-class Player {
+export class Player {
     constructor(nickname, country, balance = 1500, position = 0, properties = [], inJail = false, jailTurns = 0,) {
         // Validación que sea un array
         if (!Array.isArray(properties)) {
@@ -84,6 +84,30 @@ class Player {
             throw new TypeError('amount debe ser de tipo number');
         }
         this.balance += amount;
+    }
+
+    PlayertoJSON() {
+        return {
+            nickname: this.nickname,
+            country: this.country,
+            balance: this.balance,
+            position: this.position,
+            properties: this.properties.map(prop => prop.getId()), // Guardar solo los IDs de las propiedades  
+            inJail: this.inJail,
+            jailTurns: this.jailTurns
+        };
+    }
+
+    buyProperty(property) {
+        if (!(property instanceof PropertyTile || property instanceof RileRoadTile)) {
+            throw new TypeError("property debe ser una instancia de PropertyTile o RileRoadTile");
+        }
+        if (this.balance >= property.getPrice()) {
+            this.updateBalance(-property.getPrice());
+            this.addProperty(property);
+        } else {
+            throw new Error("Fondos insuficientes para comprar la propiedad");
+        }
     }
 }
 export default Player;

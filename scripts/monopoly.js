@@ -1,4 +1,3 @@
-// monopoly.js - MODIFICADO
 import Player from '../model/player.js';
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -8,10 +7,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // Convertir los objetos planos a instancias de Player
     let jugadores = jugadoresData.map(jugadorData => {
         return new Player(
-            jugadorData.nickname || jugadorData.nick, // Compatibilidad
-            jugadorData.country || jugadorData.pais,   // Compatibilidad
-            jugadorData.balance || jugadorData.score || 1500, // Valor por defecto
-            jugadorData.position || jugadorData.posicion || 0, // Valor por defecto
+            jugadorData.nickname || jugadorData.nick,
+            jugadorData.country || jugadorData.pais,   
+            jugadorData.balance || jugadorData.score || 1500, 
+            jugadorData.position || jugadorData.posicion || 0, 
             jugadorData.properties || [],
             jugadorData.inJail || false,
             jugadorData.jailTurns || 0
@@ -100,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error("Error al cargar el tablero:", error));
     });
 
-    // --- FUNCIONES AUXILIARES ---
+    
     function crearCasilla(data) {
     const casillaDiv = document.createElement("div");
     casillaDiv.setAttribute("id", data.id); // id de la casilla
@@ -119,19 +118,18 @@ document.addEventListener("DOMContentLoaded", function () {
     return casillaDiv;
 }
 
-
-    // Mostrar fichas en la salida - CORREGIDO
+    // Mostrar fichas en la salida
     function colocarFichas() {
         let jugadores = window.jugadores;
 
         jugadores.forEach(jugador => {
             let ficha = document.createElement("div");
             ficha.classList.add("ficha");
-            ficha.innerText = jugador.getNickname().charAt(0).toUpperCase(); // Primera letra del nick
+            ficha.innerText = jugador.getNickname().charAt(0).toUpperCase();
             ficha.setAttribute("data-id", jugador.getNickname());
             ficha.setAttribute("title", `${jugador.getNickname()} (${jugador.getCountry()}) - $${jugador.getBalance()}`);
             
-            // Buscar casilla de salida (ID "0")
+           
             let salida = document.getElementById("0");
             if (salida) {
                 salida.appendChild(ficha);
@@ -168,7 +166,7 @@ document.addEventListener("DOMContentLoaded", function () {
         jailTurns: j.getJailTurns()
     }))));
 
-    // MOVER FICHA AL DIV CON ID = nuevaPosicion
+    // mover ficha al id con= nuevaPosicion
     let ficha = document.querySelector(`.ficha[data-id="${jugador.getNickname()}"]`);
     let nuevaCasilla = document.getElementById(nuevaPosicion.toString());
 
