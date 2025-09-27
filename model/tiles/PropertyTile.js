@@ -25,16 +25,8 @@ export class PropertyTile extends Tile {
         return this.color;
     }
 
-    getId() {
-        return this.id;
-    }
-
     getmortgage() {
         return this.mortgage;
-    }
-
-    getName() {
-        return this.name;
     }
 
     getPrice() {
@@ -45,9 +37,6 @@ export class PropertyTile extends Tile {
         return this.rent;
     }
 
-    getType() {
-        return this.type;
-    }
 
     setColor(color) {
         if (typeof color !== 'string' || color === '') {
@@ -56,25 +45,11 @@ export class PropertyTile extends Tile {
         this.color = color;
     }
 
-    setId(id) {
-        if (typeof id !== 'number' || id < 0) {
-            throw new TypeError('id debe de ser de tipo string');
-        }
-        this.id = id;
-    }
-
     setmortgage(mortgage) {
         if (typeof mortgage !== 'number') {
             throw new TypeError('mortgage debe de ser de tipo number');
         }
         this.mortgage = mortgage;
-    }
-
-    setName(name) {
-        if (typeof name !== 'string' || name === '') {
-            throw new TypeError('name debe de ser de tipo string');
-        }
-        this.name = name;
     }
 
     setPrice(price) {
@@ -89,13 +64,6 @@ export class PropertyTile extends Tile {
             throw new TypeError('rent no puede estar vacio');
         }
         this.rent = rent;
-    }
-
-    setType(type) {
-        if (typeof type !== 'string' || type === '') {
-            throw new TypeError('type debe de ser de tipo string');
-        }
-        this.type = type;
     }
 
 } export default PropertyTile;

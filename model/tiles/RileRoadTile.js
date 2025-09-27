@@ -1,4 +1,5 @@
 class RileRoadTile extends Tile {
+
     constructor(id, name, type, price, mortgage, rent = {}) {
         super(id, name, type);
         this.price = price;
@@ -6,22 +7,18 @@ class RileRoadTile extends Tile {
         this.rent = rent;
     }
 
-    getId() {
-        return this.id;
-    }
-
-    getName() {
-        return this.name;
-    }
-
     getPrice() {
         return this.price;
     }
 
-    getColor() {
-        return this.color;
+    getmortgage() {
+        return this.mortgage;
     }
 
+    getRent() {
+        return this.rent;
+    }
+    
     setPrice(price) {
         if (typeof price !== 'number' || price < 0) {
             throw new TypeError('price debe de ser de tipo number');

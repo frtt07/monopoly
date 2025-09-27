@@ -4,12 +4,8 @@ class TaxTile extends Tile {
         this.action = action //Verficar la accion
     }
 
-    getName() {
-        return this.name;
-    }
-
-    getAmount() {
-        return this.action.money;
+    getAction() {
+        return this.action;
     }
 
     setAction(action) {
