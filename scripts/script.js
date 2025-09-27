@@ -1,7 +1,7 @@
 // script.js - MODIFICADO
-import Player from './model/player.js';
+import Player from '../model/player.js';
 
-function generarJugadores(n) {
+export function generarJugadores(n) {
     const jugadores = document.getElementById("recuadroJugador");
     const iniciar = document.getElementById("botonIniciar");
 
@@ -113,4 +113,7 @@ function generarJugadores(n) {
             iniciar.appendChild(botonIniciar);
         })
         .catch(error => console.error("Error cargando países:", error));
-}
+
+    }
+
+window.generarJugadores = generarJugadores;
