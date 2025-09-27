@@ -1,8 +1,9 @@
-import {PropertyTile} from "./tiles/propertyTile.js";
-import  {RileRoadTile}  from "./tiles/rileRoadTile.js";   
+import { PropertyTile } from "./tiles/propertyTile.js";
+import { RileRoadTile } from "./tiles/rileRoadTile.js";
 
 export class Player {
-    constructor(nickname, country, balance = 1500, position = 0, properties = [], inJail = false, jailTurns = 0,) {
+    constructor(id, nickname, country, balance = 1500, position = 0, properties = [], inJail = false, jailTurns = 0) {
+
         // Validación que sea un array
         if (!Array.isArray(properties)) {
             throw new TypeError("properties debe ser un array de PropertyTile");
@@ -19,6 +20,7 @@ export class Player {
             throw new TypeError('nickname debe de ser de tipo string');
         }
 
+        this.id = id;
         this.nickname = nickname;
         this.country = country;
         this.balance = balance;
@@ -64,8 +66,8 @@ export class Player {
     }
 
     addProperty(property) {
-        if (!(property instanceof PropertyTile)) {
-            throw new TypeError("property debe ser una instancia de PropertyTile");
+        if (!(property instanceof PropertyTile || property instanceof RileRoadTile)) {
+            throw new TypeError("property debe ser una instancia de PropertyTile o RileRoadTile");
         }
         this.properties.push(property);
     }
@@ -78,7 +80,7 @@ export class Player {
             throw new Error(`No se encontró la propiedad con id: ${propertyId}`);
         }
     }
-    
+
     updateBalance(amount) {
         if (typeof amount !== 'number') {
             throw new TypeError('amount debe ser de tipo number');
@@ -109,5 +111,16 @@ export class Player {
             throw new Error("Fondos insuficientes para comprar la propiedad");
         }
     }
+
+    goToJail() {
+    // Mueve al jugador a la posición de la cárcel
+    this.setposition(10); 
+
+    // Marca que está en la cárcel
+    this.setInJail(true); 
+
+    // Reinicia los turnos en la cárcel
+    this.jailTurns = 0; 
+}
 }
 export default Player;

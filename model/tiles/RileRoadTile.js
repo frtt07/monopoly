@@ -1,21 +1,51 @@
-class RileRoadTile {
-    constructor(id, name, price, rent) {
-        this.id = id;
-        this.name = name;
+class RileRoadTile extends Tile {
+    constructor(id, name, type, price, mortgage, rent = {}) {
+        super(id, name, type);
         this.price = price;
+        this.mortgage = mortgage;
         this.rent = rent;
     }
+
     getId() {
         return this.id;
     }
+
     getName() {
         return this.name;
-    }   
+    }
+
     getPrice() {
         return this.price;
     }
+
     getColor() {
         return this.color;
     }
+
+    setPrice(price) {
+        if (typeof price !== 'number' || price < 0) {
+            throw new TypeError('price debe de ser de tipo number');
+        }
+        this.price = price;
+    }
+
+    setmortgage(mortgage) {
+        if (typeof mortgage !== 'number') {
+            throw new TypeError('mortgage debe de ser de tipo number');
+        }
+        this.mortgage = mortgage;
+    }
+
+    setRent(rent) {
+        if (typeof rent !== 'object' || Array.isArray(rent)) {
+            throw new TypeError('rent debe de ser de tipo object');
+        }
+        this.rent = rent;
+    }
+
+    getRentByOwned(count) {
+        return this.rent[String(count)] ?? 0;
+    }
 }
-export {RileRoadTile};
+
+export { RileRoadTile };

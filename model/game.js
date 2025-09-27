@@ -1,5 +1,5 @@
-import { Player } from "./player.js"
-import PropertyTile from "./tiles/propertyTile.js";
+import { Player } from "./Player.js"
+import { PropertyTile } from "./tiles/propertyTile.js";
 
 class Game {
 
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (item.color === undefined) item.color = "whithe";
                 const propiedad = new PropertyTile(item.id, item.color, item.name, item.type);
                 if (item.rent) propiedad.setRent(item.rent);
-                if (item.price) propiedad.setPrice(item.price); 
+                if (item.price) propiedad.setPrice(item.price);
                 if (item.action) propiedad.setAction(item.action);
                 if (item.mortage) propiedad.setMortage(item.mortage);
 
