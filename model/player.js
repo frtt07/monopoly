@@ -1,4 +1,4 @@
-import {PropertyTile} from "./propertyTile.js";
+import PropertyTile from "./propertyTile.js"; 
 import  {RileRoadTile}  from "./rileRoadTile.js";   
 
 class Player {
