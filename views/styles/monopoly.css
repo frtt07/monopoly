@@ -82,6 +82,12 @@
 .dados{
     position: absolute;
     right: 50px;
+       top: 100px;
+}
+.siguienteTurno{
+    position: absolute;
+    right: 50px;
+    top: 130px;
 }
 .menu-ficha{
     position: absolute;

@@ -59,7 +59,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 centro.classList.add("centro");
                 centro.innerHTML = `
                     <img src="/assets/imgs/fortuna.png" alt="" class="imagenFortuna">
-                    <button id="btnDado" class="dados">Tirar Dado</button>
+                    <div class="d-flex flex-column align-items-center">
+                        <button id="btnDado" class="dados btn btn-secondary">Tirar Dado</button>
+                        <button id="btnTurno" class="siguienteTurno btn btn-warning" disabled>Siguiente Turno</button>
+                    </div>
                     <div id="resultado"></div>
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTFPiLwxLH8BbOoX_dM4pbj070os1ZH9P3tA&s" class="d-block mx-auto" alt="">
                     <img src="/assets/imgs/interrogacion.png" alt="" class="imagenInterrogacion">
@@ -67,6 +70,25 @@ document.addEventListener("DOMContentLoaded", function () {
                 tablero.appendChild(centro);
                 centro.style.gridRow = "2 / 11";
                 centro.style.gridColumn = "2 / 11";
+
+                // ✅ Inicializamos lógica de botones
+                const btnDado = document.getElementById("btnDado");
+                const btnTurno = document.getElementById("btnTurno");
+
+                btnDado.addEventListener("click", function () {
+                    tirareldado();
+                    btnDado.disabled = true;
+                    btnTurno.disabled = false;
+                });
+
+                btnTurno.addEventListener("click", function () {
+                    // Pasar turno manualmente
+                    turno = (turno + 1) % window.jugadores.length;
+                    console.log("Turno del jugador:", window.jugadores[turno].getNickname());
+
+                    btnTurno.disabled = true;
+                    btnDado.disabled = false;
+                });
 
 
                 // ---- BOTTOM (fila 11, columnas 11 → 1)
@@ -230,9 +252,6 @@ document.addEventListener("DOMContentLoaded", function () {
         <p>Balance: $${jugador.getBalance()}</p>
     </div>
     `;
-
-        // Pasar turno
-        turno = (turno + 1) % window.jugadores.length;
     }
 
     // ------------------ Comprar propiedad ------------------
