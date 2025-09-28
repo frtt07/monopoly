@@ -208,37 +208,124 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Función para actualizar el estado de los jugadores en el panel lateral
-  function actualizarEstadoJugadores() {
+  async function actualizarEstadoJugadores() {
     const listaJugadores = document.getElementById("listaJugadores");
     if (!listaJugadores) return;
 
     listaJugadores.innerHTML = "";
 
-    window.jugadores.forEach((jugador, index) => {
+    // Procesar jugadores de forma asíncrona para obtener las banderas
+    for (let index = 0; index < window.jugadores.length; index++) {
+      const jugador = window.jugadores[index];
+
       const jugadorDiv = document.createElement("div");
-      jugadorDiv.className = `card mb-2 ${
-        index === turno ? "border-primary" : ""
+      jugadorDiv.className = `card mb-3 ${
+        index === turno ? "border-primary border-2" : ""
       }`;
       jugadorDiv.style.backgroundColor = jugador.getBackground();
-      jugadorDiv.style.opacity = "0.9";
+      jugadorDiv.style.opacity = "0.95";
+
+      // Obtener nombres de propiedades
+      const propiedadesNombres = jugador.getProperties().map((propId) => {
+        const infoCasilla = obtenerInfoCasilla(propId);
+        return infoCasilla ? infoCasilla.name : `Casilla ${propId}`;
+      });
+
+      // Obtener bandera del país
+      const bandera = await obtenerBandera(jugador.getCountry());
 
       jugadorDiv.innerHTML = `
-                <div class="card-body p-2">
-                    <h6 class="card-title mb-1" style="color: ${
-                      index === turno ? "#0066cc" : "#333"
-                    };">
-                        ${index === turno ? "🎲 " : ""}${jugador.getNickname()}
-                    </h6>
-                    <p class="card-text small mb-1">
-                        💰 $${jugador.getBalance()}<br>
-                        🏠 ${jugador.getProperties().length} propiedades<br>
-                        📍 Casilla ${jugador.getPosition()}
-                    </p>
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center mb-2">
+                        <img src="${bandera}" alt="bandera" style="width: 24px; height: 16px; margin-right: 8px">
+                        <h6 class="card-title mb-0" style="color: ${
+                          index === turno ? "#0066cc" : "#333"
+                        }; font-weight: bold;">
+                            ${
+                              index === turno ? "🎲 " : ""
+                            }${jugador.getNickname()}
+                        </h6>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <small style="color: #666;">${jugador.getCountry()}</small>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>💰 Balance:</span>
+                        <span style="font-weight: bold;">$${jugador.getBalance()}</span>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>📍 Casilla:</span>
+                        <span style="font-weight: bold;">${jugador.getPosition()}</span>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <div style="font-weight: bold; margin-bottom: 4px;">🏠 Propiedades (${
+                          jugador.getProperties().length
+                        }):</div>
+                        <div style="max-height: 100px; overflow-y: auto; font-size: 12px;">
+                            ${
+                              propiedadesNombres.length > 0
+                                ? propiedadesNombres
+                                    .map((nombre) => `• ${nombre}`)
+                                    .join("<br>")
+                                : '<em style="color: #999;">Ninguna propiedad</em>'
+                            }
+                        </div>
+                    </div>
                 </div>
             `;
 
       listaJugadores.appendChild(jugadorDiv);
+    }
+  }
+
+  // Variable global para almacenar la información de países con sus banderas
+  window.countriesData = null;
+
+  // Función para cargar los países desde el backend
+  async function cargarPaises() {
+    if (!window.countriesData) {
+      try {
+        const response = await fetch("http://127.0.0.1:5000/countries");
+        const countries = await response.json();
+        window.countriesData = countries;
+      } catch (error) {
+        console.error("Error cargando países:", error);
+        window.countriesData = [];
+      }
+    }
+    return window.countriesData;
+  }
+
+  // Función para obtener la bandera del país (URL en PNG)
+  async function obtenerBandera(nombrePais) {
+    const countries = await cargarPaises();
+
+    // Buscar el país en los datos del backend
+    const country = countries.find((countryObj) => {
+      const name = Object.values(countryObj)[0];
+      return name === nombrePais;
     });
+
+    if (country) {
+      // Obtener el código del país (ej: "CO" para Colombia)
+      const code = Object.keys(country)[0];
+      // Retornar la URL de la bandera en PNG
+      return convertirCodigoABanderaImg(code);
+    }
+
+    return "https://flagsapi.com/UN/shiny/64.png"; // Bandera por defecto (ONU)
+  }
+
+  // Función para convertir código de país a URL de imagen de bandera
+  function convertirCodigoABanderaImg(codigo, estilo = "shiny", size = 64) {
+    if (!codigo || codigo.length !== 2)
+      return "https://flagsapi.com/UN/shiny/64.png";
+
+    return `https://flagsapi.com/${codigo.toUpperCase()}/${estilo}/${size}.png`;
   }
 
   let turno = 0;

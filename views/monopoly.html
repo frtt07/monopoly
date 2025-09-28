@@ -32,7 +32,12 @@
     </button>
 
     <!-- El panel lateral -->
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="demoSidebar">
+    <div
+      class="offcanvas offcanvas-start"
+      tabindex="-1"
+      id="demoSidebar"
+      style="width: 350px"
+    >
       <div class="offcanvas-header">
         <h5 class="offcanvas-title">Menú de Juego</h5>
         <button
@@ -41,8 +46,8 @@
           data-bs-dismiss="offcanvas"
         ></button>
       </div>
-      <div class="offcanvas-body">
-        <div id="acciones" class="d-flex flex-column gap-2">
+      <div class="offcanvas-body" style="padding: 15px; overflow-y: auto">
+        <div id="acciones" class="d-flex flex-column gap-2 mb-4">
           <h3>Acciones</h3>
           <button id="btnComprarPropiedad" class="btn btn">
             Comprar Propiedad
@@ -54,14 +59,16 @@
             Vender Propiedad
           </button>
           <button id="btnHipotecar" class="btn btn-warning">Hipotecar</button>
-          <button id="btnTerminarTurno" class="btn btn-secondary">
-            Terminar Turno
-          </button>
+          <button id="btnDeshipotecar" class="btn btn-info">
+            Deshipotecar
         </div>
         <hr />
         <div id="estadoJugadores">
-          <h3>Estado Jugadores</h3>
-          <div id="listaJugadores"></div>
+          <h3 style="margin-bottom: 15px">👥 Estado Jugadores</h3>
+          <div
+            id="listaJugadores"
+            style="max-height: 60vh; overflow-y: auto"
+          ></div>
         </div>
       </div>
     </div>
