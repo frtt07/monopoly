@@ -1,50 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
 
-<head>
-       
-    <meta charset="UTF-8">
-       
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Monopoly</title>
-       
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-       
-    <link rel="stylesheet" href="/views/styles/monopoly.css">
-       
-    
-</head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<body>
-    <button id="btnCargarCasillas" class="btn btn-primary container-fluid">Iniciar Juego</button>
-    <div id="tablero"></div>
+    <title>Monopoly</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="/views/styles/monopoly.css" />
+  </head>
+
+  <body>
+    <button id="btnCargarCasillas" class="btn btn-primary container-fluid">
+      Iniciar Juego
+    </button>
+    <div id="tablero"></div>
 
     <!-- Botón para abrir -->
-    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#demoSidebar">
-    Abrir menú
+    <button
+      id="abrirMenu"
+      class="btn btn-primary d-none"
+      type="button"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#demoSidebar"
+    >
+      Abrir menú
     </button>
 
     <!-- El panel lateral -->
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="demoSidebar">
-    <div class="offcanvas-header">
+    <div
+      class="offcanvas offcanvas-start"
+      tabindex="-1"
+      id="demoSidebar"
+      style="width: 350px"
+    >
+      <div class="offcanvas-header">
         <h5 class="offcanvas-title">Menú de Juego</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-    </div>
-    <div class="offcanvas-body">
-        <div id="acciones" class="d-flex flex-column gap-2">
-            <h3>Acciones</h3>
-            <button id="btnComprarPropiedad" class="btn btn">Comprar Propiedad</button>
-            <button id="btnComprarCasa" class="btn btn-success">Comprar Casa</button>
-            <button id="btnVenderPropiedad" class="btn btn-danger">Vender Propiedad</button>
-            <button id="btnHipotecar" class="btn btn-warning">Hipotecar</button>
-            <button id="btnTerminarTurno" class="btn btn-secondary">Terminar Turno</button>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="offcanvas"
+        ></button>
+      </div>
+      <div class="offcanvas-body" style="padding: 15px; overflow-y: auto">
+        <div id="acciones" class="d-flex flex-column gap-2 mb-4">
+          <h3>Acciones</h3>
+          <button id="btnComprarPropiedad" class="btn btn">
+            Comprar Propiedad
+          </button>
+          <button id="btnComprarCasa" class="btn btn-success">
+            Comprar Casa
+          </button>
+          <button id="btnVenderPropiedad" class="btn btn-danger">
+            Vender Propiedad
+          </button>
+          <button id="btnHipotecar" class="btn btn-warning">Hipotecar</button>
         </div>
-    </div>
+        <hr />
+        <div id="estadoJugadores">
+          <h3 style="margin-bottom: 15px">👥 Estado Jugadores</h3>
+          <div
+            id="listaJugadores"
+            style="max-height: 60vh; overflow-y: auto"
+          ></div>
+        </div>
+      </div>
     </div>
 
     <!-- Necesitas este script de Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="/scripts/monopoly.js"></script>
-</body>
-
+  </body>
 </html>

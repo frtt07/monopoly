@@ -18,7 +18,7 @@ class TaxTile extends Tile {
     //Aplica la accion del impuesto al jugador
     apply(player) {
     if (this.action?.money) {
-      player.updateBalance(this.action.money);
+      player.setBalance(this.action.money);
     }
   }
 
