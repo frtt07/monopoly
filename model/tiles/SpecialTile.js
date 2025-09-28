@@ -17,7 +17,7 @@ export class SpecialTile extends Tile {
 
   // Aplica la acción: cambios económicos o de posición
   apply(player) {
-    if (this.action?.money) player.updateBalance(this.action.money);
+    if (this.action?.money) player.setBalance(this.action.money);
     if (this.action?.goTo === 'jail') player.goToJail(); 
   }
 }

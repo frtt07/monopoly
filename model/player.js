@@ -1,24 +1,22 @@
-import { PropertyTile } from "./tiles/propertyTile.js";
-import { RileRoadTile } from "./tiles/rileRoadTile.js";
-
 export class Player {
-    constructor(id, nickname, country, balance = 1500, position = 0, properties = [], inJail = false, jailTurns = 0) {
-
-        console.log("properties:", properties);
+    constructor(
+        id,
+        nickname,
+        country,
+        balance = 1500,
+        position = 0,
+        properties = [],
+        inJail = false,
+        jailTurns = 0,
+        background = ""
+    ) {
         // Validación que sea un array
         if (!Array.isArray(properties)) {
-            throw new TypeError("properties debe ser un array de PropertyTile");
+            throw new TypeError("properties debe ser un array de números (ids de casilla)");
         }
 
-        //validar que cada elemento sea instancia de PropertyTile
-        properties.forEach((prop, i) => {
-            if (!(prop instanceof PropertyTile || prop instanceof RileRoadTile)) {
-                throw new TypeError(`Elemento en properties[${i}] no es PropertyTile`);
-            }
-        });
-
-        if (typeof nickname !== 'string' || nickname.trim() === '') {
-            throw new TypeError('nickname debe de ser de tipo string');
+        if (typeof nickname !== "string" || nickname.trim() === "") {
+            throw new TypeError("nickname debe de ser de tipo string");
         }
 
         this.id = id;
@@ -26,11 +24,16 @@ export class Player {
         this.country = country;
         this.balance = balance;
         this.position = position;
-        this.properties = properties;
+        this.properties = properties; // array de ids
         this.inJail = inJail;
         this.jailTurns = jailTurns;
+        this.background = background;
     }
 
+    // -------- Getters --------
+    getId() {
+        return this.id;
+    }
     getNickname() {
         return this.nickname;
     }
@@ -52,29 +55,44 @@ export class Player {
     getJailTurns() {
         return this.jailTurns;
     }
+    getBackground() {
+        return this.background;
+    }
 
+    // -------- Setters --------
     setposition(newPosition) {
-        if (typeof newPosition !== 'number' || newPosition < 0) {
-            throw new TypeError('newPosition debe de ser de tipo number');
+        if (typeof newPosition !== "number" || newPosition < 0) {
+            throw new TypeError("newPosition debe de ser de tipo number");
         }
         this.position = newPosition;
     }
+
     setInJail(status) {
-        if (typeof status !== 'boolean') {
-            throw new TypeError('status debe de ser de tipo boolean');
+        if (typeof status !== "boolean") {
+            throw new TypeError("status debe de ser de tipo boolean");
         }
         this.inJail = status;
     }
 
-    addProperty(property) {
-        if (!(property instanceof PropertyTile || property instanceof RileRoadTile)) {
-            throw new TypeError("property debe ser una instancia de PropertyTile o RileRoadTile");
+    setBalance(amount) {
+        if (typeof amount !== "number") {
+            throw new TypeError("amount debe ser de tipo number");
         }
-        this.properties.push(property);
+        this.balance += amount;
+    }
+
+    // -------- Propiedades --------
+    addProperty(propertyId) {
+        if (typeof propertyId !== "number") {
+            throw new TypeError("propertyId debe ser un número");
+        }
+        if (!this.properties.includes(propertyId)) {
+            this.properties.push(propertyId);
+        }
     }
 
     removeProperty(propertyId) {
-        const index = this.properties.findIndex(prop => prop.getId() === propertyId);
+        const index = this.properties.indexOf(propertyId);
         if (index !== -1) {
             this.properties.splice(index, 1);
         } else {
@@ -82,46 +100,57 @@ export class Player {
         }
     }
 
-    updateBalance(amount) {
-        if (typeof amount !== 'number') {
-            throw new TypeError('amount debe ser de tipo number');
-        }
-        this.balance += amount;
+    tieneProperty(posicion) {
+        return this.properties.includes(posicion);
     }
 
+    // -------- Serialización --------
     PlayertoJSON() {
         return {
             nickname: this.nickname,
             country: this.country,
             balance: this.balance,
             position: this.position,
-            properties: this.properties.map(prop => prop.getId()), // Guardar solo los IDs de las propiedades  
+            properties: this.properties, // array de ids
             inJail: this.inJail,
-            jailTurns: this.jailTurns
+            jailTurns: this.jailTurns,
+            background: this.background,
         };
     }
 
-    buyProperty(property) {
-        if (!(property instanceof PropertyTile || property instanceof RileRoadTile)) {
-            throw new TypeError("property debe ser una instancia de PropertyTile o RileRoadTile");
+    // -------- Acciones --------
+    buyProperty(casillaId, precio, casillaElement) {
+        if (typeof casillaId !== "number") {
+            throw new TypeError("casillaId debe ser un número");
         }
-        if (this.balance >= property.getPrice()) {
-            this.updateBalance(-property.getPrice());
-            this.addProperty(property);
+        if (typeof precio !== "number" || precio <= 0) {
+            throw new TypeError("precio debe ser un número válido");
+        }
+
+        if (this.balance >= precio) {
+            this.setBalance(-precio);
+
+            // Registrar propiedad
+            this.addProperty(casillaId);
+
+            // Cambiar color de la casilla al color del jugador
+            if (casillaElement) {
+                let colorBox = casillaElement.querySelector(".casilla-color");
+                if (colorBox) {
+                    colorBox.style.backgroundColor = this.getBackground();
+                }
+            }
         } else {
             throw new Error("Fondos insuficientes para comprar la propiedad");
         }
     }
 
+
     goToJail() {
-    // Mueve al jugador a la posición de la cárcel
-    this.setposition(10); 
-
-    // Marca que está en la cárcel
-    this.setInJail(true); 
-
-    // Reinicia los turnos en la cárcel
-    this.jailTurns = 0; 
+        this.setposition(10); // posición de la cárcel
+        this.setInJail(true);
+        this.jailTurns = 0;
+    }
 }
-}
+
 export default Player;
