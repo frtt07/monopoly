@@ -5,8 +5,10 @@ document.addEventListener("DOMContentLoaded", function () {
     let jugadoresData = JSON.parse(localStorage.getItem("jugadores")) || [];
     
     // Convertir los objetos planos a instancias de Player
-    let jugadores = jugadoresData.map(jugadorData => {
+    let jugadores = jugadoresData.map((jugadorData, index) => {
+        console.log("jugadorData:", jugadorData);
         return new Player(
+            index + 1, // Asignar un ID basado en el índice
             jugadorData.nickname || jugadorData.nick,
             jugadorData.country || jugadorData.pais,   
             jugadorData.balance || jugadorData.score || 1500, 

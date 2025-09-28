@@ -2,6 +2,7 @@
 import Player from '../model/player.js';
 
 export function generarJugadores(n) {
+    console.log(`Generando ${n} jugadores...`);
     const jugadores = document.getElementById("recuadroJugador");
     const iniciar = document.getElementById("botonIniciar");
 
@@ -83,6 +84,7 @@ export function generarJugadores(n) {
 
                     // Crear instancia de Player en lugar de objeto simple
                     const nuevoJugador = new Player(
+                        i,         // id
                         nick,      // nickname
                         pais,      // country
                         1500,      // balance

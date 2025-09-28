@@ -1,3 +1,5 @@
+import { Tile } from './tile.js';
+
 class RileRoadTile extends Tile {
 
     constructor(id, name, type, price, mortgage, rent = {}) {
