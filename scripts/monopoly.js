@@ -350,12 +350,67 @@ document.addEventListener("DOMContentLoaded", function () {
   function calcularRenta(casillaId, dueno) {
     const infoCasilla = obtenerInfoCasilla(casillaId);
 
-    if (!infoCasilla || infoCasilla.type !== "property") {
+    if (!infoCasilla) {
+      console.log("No se encontró información de la casilla:", casillaId);
       return 0;
     }
 
-    // Por ahora solo usamos la renta base, se puede expandir para incluir casas/hoteles
-    return infoCasilla.rent ? infoCasilla.rent.base : 0;
+    console.log(
+      "Calculando renta para casilla:",
+      infoCasilla.name,
+      "Tipo:",
+      infoCasilla.type
+    );
+
+    // Verificar si es un ferrocarril
+    if (
+      infoCasilla.type === "railroad" ||
+      infoCasilla.name.toLowerCase().includes("ferrocarril")
+    ) {
+      // Contar cuántos ferrocarriles tiene el dueño
+      const ferrocarrilesDelDueno = dueno.getProperties().filter((propId) => {
+        const propInfo = obtenerInfoCasilla(propId);
+        return (
+          propInfo &&
+          (propInfo.type === "railroad" ||
+            propInfo.name.toLowerCase().includes("ferrocarril"))
+        );
+      }).length;
+
+      console.log(
+        "Es un ferrocarril. El dueño tiene",
+        ferrocarrilesDelDueno,
+        "ferrocarriles"
+      );
+      console.log("Estructura de rent:", infoCasilla.rent);
+
+      // Usar la estructura de rent del backend: {"1": 25, "2": 50, "3": 100, "4": 200}
+      if (
+        infoCasilla.rent &&
+        infoCasilla.rent[ferrocarrilesDelDueno.toString()]
+      ) {
+        const renta = infoCasilla.rent[ferrocarrilesDelDueno.toString()];
+        console.log("Renta calculada para ferrocarril:", renta);
+        return renta;
+      }
+
+      // Fallback a renta base si no encuentra la estructura específica
+      const rentaFallback = infoCasilla.rent ? infoCasilla.rent.base || 0 : 0;
+      console.log("Usando renta fallback para ferrocarril:", rentaFallback);
+      return rentaFallback;
+    }
+
+    // Para propiedades normales, verificar que sea tipo property
+    if (infoCasilla.type === "property") {
+      // Usar la renta base
+      const renta = infoCasilla.rent ? infoCasilla.rent.base : 0;
+      console.log("Renta calculada para propiedad normal:", renta);
+      return renta;
+    }
+
+    // Si no es ni property ni railroad, no se paga renta
+    console.log("La casilla no es rentable (tipo:", infoCasilla.type, ")");
+    return 0;
   }
 
   function colocarPropiedades() {
@@ -447,6 +502,28 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
           const resultadoPago = jugador.payRent(renta, duenoCasilla);
 
+          // Información adicional para ferrocarriles
+          let infoAdicional = "";
+          if (
+            infoCasilla.type === "railroad" ||
+            infoCasilla.name.toLowerCase().includes("ferrocarril")
+          ) {
+            const ferrocarrilesDelDueno = duenoCasilla
+              .getProperties()
+              .filter((propId) => {
+                const propInfo = obtenerInfoCasilla(propId);
+                return (
+                  propInfo &&
+                  (propInfo.type === "railroad" ||
+                    propInfo.name.toLowerCase().includes("ferrocarril"))
+                );
+              }).length;
+
+            infoAdicional = `<br><small style="color: #666;">🚂 ${duenoCasilla.getNickname()} tiene ${ferrocarrilesDelDueno} ferrocarril${
+              ferrocarrilesDelDueno > 1 ? "es" : ""
+            }</small>`;
+          }
+
           mensajeRenta = `
                         <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 6px; padding: 10px; color: #856404;">
                             <div style="font-weight: bold; margin-bottom: 5px;">💰 Pago de Renta</div>
@@ -454,7 +531,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 ${jugador.getNickname()} → ${duenoCasilla.getNickname()}: <strong>$${renta}</strong><br>
                                 <small style="color: #666;">Propiedad: ${
                                   infoCasilla.name
-                                }</small>
+                                }</small>${infoAdicional}
                             </div>
                         </div>
                     `;
