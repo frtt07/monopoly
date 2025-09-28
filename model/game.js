@@ -1,5 +1,5 @@
 import { Player } from "./Player.js"
-import { PropertyTile } from "./tiles/propertyTile.js";
+import { PropertyTile } from "./tiles/PropertyTile.js";
 
 class Game {
 

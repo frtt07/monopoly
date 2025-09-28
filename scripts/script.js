@@ -1,5 +1,5 @@
 // script.js - MODIFICADO
-import Player from '../model/player.js';
+import Player from '../model/Player.js';
 
 export function generarJugadores(n) {
     const jugadores = document.getElementById("recuadroJugador");

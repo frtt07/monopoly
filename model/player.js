@@ -1,5 +1,5 @@
-import { PropertyTile } from "./tiles/propertyTile.js";
-import { RileRoadTile } from "./tiles/rileRoadTile.js";
+import { PropertyTile } from "./tiles/PropertyTile.js";
+import { RileRoadTile } from "./tiles/RileRoadTile.js";
 
 export class Player {
     constructor(id, nickname, country, balance = 1500, position = 0, properties = [], inJail = false, jailTurns = 0) {

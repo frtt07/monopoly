@@ -1,4 +1,4 @@
-import Player from '../model/player.js';
+import Player from '../model/Player.js';
 
 document.addEventListener("DOMContentLoaded", function () {
     // Recuperar jugadores guardados en localStorage y convertirlos a instancias de Player
