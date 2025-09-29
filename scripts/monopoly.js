@@ -23,7 +23,8 @@ document.addEventListener("DOMContentLoaded", function () {
       jugadorData.properties || [],
       jugadorData.inJail || false,
       jugadorData.jailTurns || 0,
-      jugadorData.background || generaColor()
+      jugadorData.background || generaColor(),
+      jugadorData.mortgagedProperties || []
     );
   });
 
@@ -269,11 +270,30 @@ document.addEventListener("DOMContentLoaded", function () {
                             ${
                               propiedadesNombres.length > 0
                                 ? propiedadesNombres
-                                    .map((nombre) => `• ${nombre}`)
+                                    .map((nombre, idx) => {
+                                      const propId =
+                                        jugador.getProperties()[idx];
+                                      const esHipotecada =
+                                        jugador.isPropertyMortgaged(propId);
+                                      return esHipotecada
+                                        ? `• ${nombre} <span style="color: red; font-weight: bold;">[HIPOTECADA]</span>`
+                                        : `• ${nombre}`;
+                                    })
                                     .join("<br>")
                                 : '<em style="color: #999;">Ninguna propiedad</em>'
                             }
                         </div>
+                        ${
+                          jugador.getMortgagedProperties().length > 0
+                            ? `<div style="margin-top: 8px; padding: 4px; background-color: rgba(220,53,69,0.1); border-radius: 4px;">
+                               <small style="color: #dc3545;">
+                                 🚨 Hipotecadas: ${
+                                   jugador.getMortgagedProperties().length
+                                 }
+                               </small>
+                             </div>`
+                            : ""
+                        }
                     </div>
                 </div>
             `;
@@ -355,6 +375,12 @@ document.addEventListener("DOMContentLoaded", function () {
       return 0;
     }
 
+    // *** VERIFICAR SI LA PROPIEDAD ESTÁ HIPOTECADA ***
+    if (dueno.isPropertyMortgaged(casillaId)) {
+      console.log("La propiedad está hipotecada, no se cobra renta");
+      return 0;
+    }
+
     console.log(
       "Calculando renta para casilla:",
       infoCasilla.name,
@@ -423,6 +449,15 @@ document.addEventListener("DOMContentLoaded", function () {
           let colorBox = casilla.querySelector(".casilla-color");
           if (colorBox) {
             colorBox.style.backgroundColor = jugador.getBackground();
+
+            // *** MOSTRAR INDICADOR DE HIPOTECA ***
+            if (jugador.isPropertyMortgaged(propId)) {
+              colorBox.style.border = "3px solid red";
+              colorBox.style.opacity = "0.5";
+            } else {
+              colorBox.style.border = "";
+              colorBox.style.opacity = "1";
+            }
           }
         }
       });
@@ -926,6 +961,180 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
+  // ------------------ Hipotecar Propiedad ------------------
+  document
+    .getElementById("btnHipotecar")
+    .addEventListener("click", function () {
+      let jugador = window.jugadores[turno]; // jugador actual
+
+      // Obtener propiedades no hipotecadas del jugador
+      let propiedadesNoHipotecadas = jugador.getUnmortgagedProperties();
+
+      if (propiedadesNoHipotecadas.length === 0) {
+        alert("No tienes propiedades disponibles para hipotecar");
+        return;
+      }
+
+      // Crear lista de opciones
+      let opciones = "Selecciona una propiedad para hipotecar:\n\n";
+      propiedadesNoHipotecadas.forEach((propId, index) => {
+        let propiedad = encontrarPropiedadEnTablero(propId);
+        if (propiedad) {
+          opciones += `${index + 1}. ${propiedad.name} (Hipoteca: $${
+            propiedad.mortgage || 0
+          })\n`;
+        }
+      });
+
+      let seleccion = prompt(opciones + "\nIngresa el número de la propiedad:");
+
+      if (seleccion === null) return; // Cancelado
+
+      let indice = parseInt(seleccion) - 1;
+
+      if (
+        isNaN(indice) ||
+        indice < 0 ||
+        indice >= propiedadesNoHipotecadas.length
+      ) {
+        alert("Selección inválida");
+        return;
+      }
+
+      let propiedadId = propiedadesNoHipotecadas[indice];
+      let propiedad = encontrarPropiedadEnTablero(propiedadId);
+
+      if (!propiedad || !propiedad.mortgage) {
+        alert("Esta propiedad no se puede hipotecar");
+        return;
+      }
+
+      try {
+        // Hipotecar la propiedad
+        jugador.mortgageProperty(propiedadId, propiedad.mortgage);
+
+        // Cambiar visual de la casilla (agregar indicador de hipoteca)
+        let casilla = document.getElementById(propiedadId);
+        if (casilla) {
+          let colorBox = casilla.querySelector(".casilla-color");
+          if (colorBox) {
+            colorBox.style.border = "3px solid red";
+            colorBox.style.opacity = "0.5";
+          }
+        }
+
+        // Guardar en localStorage
+        localStorage.setItem(
+          "jugadores",
+          JSON.stringify(window.jugadores.map((j) => j.PlayertoJSON()))
+        );
+
+        alert(
+          `${jugador.getNickname()} hipotecó ${propiedad.name} y recibió $${
+            propiedad.mortgage
+          }`
+        );
+
+        // Actualizar estado de jugadores
+        actualizarEstadoJugadores();
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+
+  // ------------------ Deshipotecar Propiedad ------------------
+  document
+    .getElementById("btnDeshipotecar")
+    .addEventListener("click", function () {
+      let jugador = window.jugadores[turno]; // jugador actual
+
+      // Obtener propiedades hipotecadas del jugador
+      let propiedadesHipotecadas = jugador.getMortgagedProperties();
+
+      if (propiedadesHipotecadas.length === 0) {
+        alert("No tienes propiedades hipotecadas");
+        return;
+      }
+
+      // Crear lista de opciones
+      let opciones = "Selecciona una propiedad para deshipotecar:\n\n";
+      propiedadesHipotecadas.forEach((propId, index) => {
+        let propiedad = encontrarPropiedadEnTablero(propId);
+        if (propiedad) {
+          let costoTotal = Math.ceil(propiedad.mortgage * 1.1);
+          opciones += `${index + 1}. ${
+            propiedad.name
+          } (Costo: $${costoTotal} - Hipoteca + 10% interés)\n`;
+        }
+      });
+
+      let seleccion = prompt(opciones + "\nIngresa el número de la propiedad:");
+
+      if (seleccion === null) return; // Cancelado
+
+      let indice = parseInt(seleccion) - 1;
+
+      if (
+        isNaN(indice) ||
+        indice < 0 ||
+        indice >= propiedadesHipotecadas.length
+      ) {
+        alert("Selección inválida");
+        return;
+      }
+
+      let propiedadId = propiedadesHipotecadas[indice];
+      let propiedad = encontrarPropiedadEnTablero(propiedadId);
+
+      if (!propiedad || !propiedad.mortgage) {
+        alert("Error al encontrar la propiedad");
+        return;
+      }
+
+      let costoTotal = Math.ceil(propiedad.mortgage * 1.1);
+
+      if (
+        !confirm(
+          `¿Estás seguro de deshipotecar ${propiedad.name} por $${costoTotal}?`
+        )
+      ) {
+        return;
+      }
+
+      try {
+        // Deshipotecar la propiedad
+        jugador.unmortgageProperty(propiedadId, propiedad.mortgage);
+
+        // Restaurar visual de la casilla
+        let casilla = document.getElementById(propiedadId);
+        if (casilla) {
+          let colorBox = casilla.querySelector(".casilla-color");
+          if (colorBox) {
+            colorBox.style.border = "";
+            colorBox.style.opacity = "1";
+            colorBox.style.backgroundColor = jugador.getBackground();
+          }
+        }
+
+        // Guardar en localStorage
+        localStorage.setItem(
+          "jugadores",
+          JSON.stringify(window.jugadores.map((j) => j.PlayertoJSON()))
+        );
+
+        alert(
+          `${jugador.getNickname()} deshipotecó ${
+            propiedad.name
+          } pagando $${costoTotal}`
+        );
+
+        // Actualizar estado de jugadores
+        actualizarEstadoJugadores();
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+
   // ------------------ Finalizar Juego ------------------
   document
     .getElementById("btnFinalizarJuego")
@@ -966,18 +1175,18 @@ document.addEventListener("DOMContentLoaded", function () {
   function calcularPatrimonio(jugador) {
     let patrimonio = jugador.getBalance(); // Dinero disponible
 
-    // Sumar valor de propiedades
+    // Sumar valor de propiedades NO HIPOTECADAS
     jugador.getProperties().forEach((propId) => {
       if (window.tableroData) {
         let propiedad = encontrarPropiedadEnTablero(propId);
         if (propiedad && propiedad.price) {
-          patrimonio += propiedad.price;
+          // *** SOLO CONTAR PROPIEDADES NO HIPOTECADAS ***
+          if (!jugador.isPropertyMortgaged(propId)) {
+            patrimonio += propiedad.price;
 
-          // TODO: Aquí se debería añadir el valor de casas (100) y hoteles (200)
-          // Por ahora no tenemos implementado el sistema de casas/hoteles
-
-          // TODO: Restar valor de propiedades hipotecadas
-          // Por ahora no tenemos implementado el sistema de hipotecas
+            // TODO: Aquí se debería añadir el valor de casas (100) y hoteles (200)
+            // Por ahora no tenemos implementado el sistema de casas/hoteles
+          }
         }
       }
     });

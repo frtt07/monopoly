@@ -1,6 +1,3 @@
-import { PropertyTile } from "./tiles/PropertyTile.js";
-import { RileRoadTile } from "./tiles/RileRoadTile.js";
-
 export class Player {
   constructor(
     id,
@@ -11,7 +8,8 @@ export class Player {
     properties = [],
     inJail = false,
     jailTurns = 0,
-    background = ""
+    background = "",
+    mortgagedProperties = []
   ) {
     // Validación que sea un array
     if (!Array.isArray(properties)) {
@@ -30,6 +28,7 @@ export class Player {
     this.balance = balance;
     this.position = position;
     this.properties = properties; // array de ids
+    this.mortgagedProperties = mortgagedProperties; // array de ids hipotecados
     this.inJail = inJail;
     this.jailTurns = jailTurns;
     this.background = background;
@@ -79,9 +78,8 @@ export class Player {
     this.inJail = status;
   }
 
-
   setBalance(amount) {
-      this.balance = amount;
+    this.balance = amount;
   }
 
   // -------- Propiedades --------
@@ -115,6 +113,7 @@ export class Player {
       balance: this.balance,
       position: this.position,
       properties: this.properties, // array de ids
+      mortgagedProperties: this.mortgagedProperties, // array de ids hipotecados
       inJail: this.inJail,
       jailTurns: this.jailTurns,
       background: this.background,
@@ -180,6 +179,93 @@ export class Player {
       payerBalance: this.balance,
       ownerBalance: owner.balance,
     };
+  }
+
+  // -------- Métodos para hipotecas --------
+
+  /**
+   * Hipoteca una propiedad para obtener liquidez
+   * @param {number} propertyId - ID de la propiedad a hipotecar
+   * @param {number} mortgageValue - Valor de la hipoteca
+   * @returns {boolean} - true si se hipotecó exitosamente
+   */
+  mortgageProperty(propertyId, mortgageValue) {
+    // Verificar que el jugador tiene la propiedad
+    if (!this.tieneProperty(propertyId)) {
+      throw new Error("No puedes hipotecar una propiedad que no posees");
+    }
+
+    // Verificar que la propiedad no esté ya hipotecada
+    if (this.mortgagedProperties.includes(propertyId)) {
+      throw new Error("Esta propiedad ya está hipotecada");
+    }
+
+    // Agregar a propiedades hipotecadas
+    this.mortgagedProperties.push(propertyId);
+
+    // Agregar el dinero al balance
+    this.setBalance(this.getBalance() + mortgageValue);
+
+    return true;
+  }
+
+  /**
+   * Deshipoteca una propiedad pagando el valor + 10% de interés
+   * @param {number} propertyId - ID de la propiedad a deshipotecar
+   * @param {number} mortgageValue - Valor original de la hipoteca
+   * @returns {boolean} - true si se deshipotecó exitosamente
+   */
+  unmortgageProperty(propertyId, mortgageValue) {
+    // Verificar que la propiedad está hipotecada
+    if (!this.mortgagedProperties.includes(propertyId)) {
+      throw new Error("Esta propiedad no está hipotecada");
+    }
+
+    // Calcular el costo total (valor + 10% de interés)
+    const totalCost = Math.ceil(mortgageValue * 1.1);
+
+    // Verificar que el jugador tiene fondos suficientes
+    if (this.getBalance() < totalCost) {
+      throw new Error(
+        `Fondos insuficientes. Necesitas $${totalCost} para deshipotecar esta propiedad`
+      );
+    }
+
+    // Remover de propiedades hipotecadas
+    const index = this.mortgagedProperties.indexOf(propertyId);
+    this.mortgagedProperties.splice(index, 1);
+
+    // Deducir el costo del balance
+    this.setBalance(this.getBalance() - totalCost);
+
+    return true;
+  }
+
+  /**
+   * Verifica si una propiedad está hipotecada
+   * @param {number} propertyId - ID de la propiedad
+   * @returns {boolean} - true si está hipotecada
+   */
+  isPropertyMortgaged(propertyId) {
+    return this.mortgagedProperties.includes(propertyId);
+  }
+
+  /**
+   * Obtiene todas las propiedades hipotecadas
+   * @returns {Array} - Array de IDs de propiedades hipotecadas
+   */
+  getMortgagedProperties() {
+    return [...this.mortgagedProperties];
+  }
+
+  /**
+   * Obtiene todas las propiedades NO hipotecadas
+   * @returns {Array} - Array de IDs de propiedades no hipotecadas
+   */
+  getUnmortgagedProperties() {
+    return this.properties.filter(
+      (propId) => !this.mortgagedProperties.includes(propId)
+    );
   }
 }
 
