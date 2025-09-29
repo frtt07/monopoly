@@ -705,7 +705,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function tirareldado() {
     // Dados - cambia MODO_PRUEBA a true para usar dados fijos
-    const MODO_PRUEBA = true;
+    const MODO_PRUEBA = false;
 
     let dado1, dado2;
     if (MODO_PRUEBA) {
