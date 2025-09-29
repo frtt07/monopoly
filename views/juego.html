@@ -1,76 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles\vista.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles\vista.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
     <title>Document</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <nav class="navbar navbar-expand-lg custom-navbar py-0">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="index.html">
-                <img src="../assets/imgs/logo.png" alt="Logo" class="rounded mx-auto d-block">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.html">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="juego.html">Jugar</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="juego.html">Ranking</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" aria-disabled="true" href="tablero.html">Nuestro Tablero</a>
-                    </li>
-                </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search" />
-                    <button class="btn btn-dark" type="submit">Buscar</button>
-                </form>
-            </div>
+      <div class="container-fluid">
+        <a class="navbar-brand" href="index.html">
+          <img
+            src="../assets/imgs/logo.png"
+            alt="Logo"
+            class="rounded mx-auto d-block"
+          />
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="index.html"
+                >Inicio</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="juego.html">Jugar</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="ranking.html">Ranking</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-disabled="true" href="tablero.html"
+                >Nuestro Tablero</a
+              >
+            </li>
+          </ul>
+          <form class="d-flex" role="search">
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Buscar"
+              aria-label="Search"
+            />
+            <button class="btn btn-dark" type="submit">Buscar</button>
+          </form>
         </div>
+      </div>
     </nav>
     <div class="container">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTFPiLwxLH8BbOoX_dM4pbj070os1ZH9P3tA&s"
-            class="d-block mx-auto" alt="">
-        <h1 class="text-center py-0">
-            Bienvenido a Monopoly
-        </h1>
-        <br>
-        <br>
+      <img
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTFPiLwxLH8BbOoX_dM4pbj070os1ZH9P3tA&s"
+        class="d-block mx-auto"
+        alt=""
+      />
+      <h1 class="text-center py-0">Bienvenido a Monopoly</h1>
+      <br />
+      <br />
 
-        <div><label for="">Numero de Jugadores:</label></div>
-        <br>
-        <div>
-            <button class="btn btn-outline-primary" onclick="generarJugadores(2)">2</button>
-            <button class="btn btn-outline-primary" onclick="generarJugadores(3)">3</button>
-            <button class="btn btn-outline-primary" onclick="generarJugadores(4)">4</button>
-        </div>
-        <br>
-        <br>
-        <div id="recuadroJugador" class="row"></div>
-        <br>
-        <div id="botonIniciar" class="mt-3 text-center"></div>
+      <div><label for="">Numero de Jugadores:</label></div>
+      <br />
+      <div>
+        <button class="btn btn-outline-primary" onclick="generarJugadores(2)">
+          2
+        </button>
+        <button class="btn btn-outline-primary" onclick="generarJugadores(3)">
+          3
+        </button>
+        <button class="btn btn-outline-primary" onclick="generarJugadores(4)">
+          4
+        </button>
+      </div>
+      <br />
+      <br />
+      <div id="recuadroJugador" class="row"></div>
+      <br />
+      <div id="botonIniciar" class="mt-3 text-center"></div>
     </div>
-    <p class="final-pagina">Proyecto Monopoly(Front-End)</p>
     <!-- En juego.html, cambia el script para que sea módulo -->
     <script type="module" src="../scripts/script.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-        crossorigin="anonymous"></script>
-</body>
-
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+  </body>
 </html>

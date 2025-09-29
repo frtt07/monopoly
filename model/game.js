@@ -1,4 +1,4 @@
-import { Player } from "./Player.js"
+import { Player } from "./player.js"
 import { PropertyTile } from "./tiles/PropertyTile.js";
 
 class Game {
