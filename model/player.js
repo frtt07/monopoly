@@ -79,11 +79,9 @@ export class Player {
     this.inJail = status;
   }
 
+
   setBalance(amount) {
-    if (typeof amount !== "number") {
-      throw new TypeError("amount debe ser de tipo number");
-    }
-    this.balance += amount;
+      this.balance = amount;
   }
 
   // -------- Propiedades --------

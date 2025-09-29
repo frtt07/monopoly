@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         btnTurno.addEventListener("click", function () {
-          // Pasar turno manualmente
+          // Pasar  manualmente
           turno = (turno + 1) % window.jugadores.length;
           console.log(
             "Turno del jugador:",
@@ -429,28 +429,252 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // Función para obtener una carta aleatoria de Chance
+  function obtenerCartaChance() {
+    if (!window.tableroData || !window.tableroData.chance) {
+      console.error("No se encontraron cartas de Chance en los datos del tablero");
+      return null;
+    }
+    
+    const cartas = window.tableroData.chance;
+    const indiceAleatorio = Math.floor(Math.random() * cartas.length);
+    return cartas[indiceAleatorio];
+  }
+
+  function obtenerCartaCommunityChest() {
+    if (!window.tableroData || !window.tableroData.community_chest) {
+      console.error("No se encontraron cartas de Community Chest en los datos del tablero");
+      return null;
+    }
+    
+    const cartas = window.tableroData.community_chest;
+    const indiceAleatorio = Math.floor(Math.random() * cartas.length);
+    return cartas[indiceAleatorio];
+  }
+
+  
+function procesarCartaChance(jugador, carta) {
+    if (!carta || !carta.action) return "";
+    
+    let mensaje = "";
+    
+    if (carta.action.money) {
+        const cantidad = carta.action.money;
+        const balanceActual = jugador.getBalance(); // Obtener balance actual
+        
+        if (cantidad > 0) {
+            const nuevoBalance = balanceActual + cantidad;
+            jugador.setBalance(nuevoBalance); // Establecer nuevo balance
+            mensaje = `
+                <div style="background: #d4edda; border: 1px solid #c3e6cb; border-radius: 6px; padding: 10px; color: #155724;">
+                    <div style="font-weight: bold; margin-bottom: 5px;">🎲 Carta de Sorpresa</div>
+                    <div style="font-size: 14px;">
+                        ${carta.description}<br>
+                        <strong style="color: #28a745;">+$${Math.abs(cantidad)}</strong><br>
+                        <small>Balance anterior: $${balanceActual} → Nuevo balance: $${nuevoBalance}</small>
+                    </div>
+                </div>
+            `;
+        } else {
+            try {
+                const nuevoBalance = balanceActual + cantidad;
+                if (nuevoBalance >= 0) {
+                    jugador.setBalance(nuevoBalance);
+                    mensaje = `
+                        <div style="background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 6px; padding: 10px; color: #721c24;">
+                            <div style="font-weight: bold; margin-bottom: 5px;">🎲 Carta de Sorpresa</div>
+                            <div style="font-size: 14px;">
+                                ${carta.description}<br>
+                                <strong style="color: #dc3545;">-$${Math.abs(cantidad)}</strong><br>
+                                <small>Balance anterior: $${balanceActual} → Nuevo balance: $${nuevoBalance}</small>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    throw new Error("Fondos insuficientes");
+                }
+            } catch (error) {
+                mensaje = `
+                    <div style="background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 6px; padding: 10px; color: #721c24;">
+                        <div style="font-weight: bold; margin-bottom: 5px;">🎲 Carta de Sorpresa</div>
+                        <div style="font-size: 14px;">
+                            ${carta.description}<br>
+                            <strong style="color: #dc3545;">No tienes suficiente dinero para pagar!</strong><br>
+                            <small>Balance actual: $${balanceActual}</small>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+    }
+    
+    return mensaje;
+}
+
+// Función para procesar una carta de Community Chest
+function procesarCartaCommunityChest(jugador, carta) {
+    if (!carta || !carta.action) return "";
+    
+    let mensaje = "";
+    
+    if (carta.action.money) {
+        const cantidad = carta.action.money;
+        const balanceActual = jugador.getBalance(); // Obtener balance actual
+        
+        if (cantidad > 0) {
+            const nuevoBalance = balanceActual + cantidad;
+            jugador.setBalance(nuevoBalance); // Establecer nuevo balance
+            mensaje = `
+                <div style="background: #d1ecf1; border: 1px solid #bee5eb; border-radius: 6px; padding: 10px; color: #0c5460;">
+                    <div style="font-weight: bold; margin-bottom: 5px;">🏦 Caja de Comunidad</div>
+                    <div style="font-size: 14px;">
+                        ${carta.description}<br>
+                        <strong style="color: #17a2b8;">+$${Math.abs(cantidad)}</strong><br>
+                        <small>Balance anterior: $${balanceActual} → Nuevo balance: $${nuevoBalance}</small>
+                    </div>
+                </div>
+            `;
+        } else {
+            try {
+                const nuevoBalance = balanceActual + cantidad; // cantidad es negativa
+                if (nuevoBalance >= 0) {
+                    jugador.setBalance(nuevoBalance);
+                    mensaje = `
+                        <div style="background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 6px; padding: 10px; color: #721c24;">
+                            <div style="font-weight: bold; margin-bottom: 5px;">🏦 Caja de Comunidad</div>
+                            <div style="font-size: 14px;">
+                                ${carta.description}<br>
+                                <strong style="color: #dc3545;">-$${Math.abs(cantidad)}</strong><br>
+                                <small>Balance anterior: $${balanceActual} → Nuevo balance: $${nuevoBalance}</small>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    throw new Error("Fondos insuficientes");
+                }
+            } catch (error) {
+                mensaje = `
+                    <div style="background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 6px; padding: 10px; color: #721c24;">
+                        <div style="font-weight: bold; margin-bottom: 5px;">🏦 Caja de Comunidad</div>
+                        <div style="font-size: 14px;">
+                            ${carta.description}<br>
+                            <strong style="color: #dc3545;">No tienes suficiente dinero para pagar!</strong><br>
+                            <small>Balance actual: $${balanceActual}</small>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+    }
+    
+    return mensaje;
+}
+
+  // Función para verificar y procesar casillas especiales
+function verificarCasillaEspecial(jugador, casillaId) {
+    const infoCasilla = obtenerInfoCasilla(casillaId);
+    if (!infoCasilla) return "";
+    
+    let mensajeEspecial = "";
+    
+    switch (infoCasilla.type) {
+        case "chance":
+            const cartaChance = obtenerCartaChance();
+            if (cartaChance) {
+                mensajeEspecial = procesarCartaChance(jugador, cartaChance);
+            }
+            break;
+            
+        case "community_chest":
+            const cartaCommunity = obtenerCartaCommunityChest();
+            if (cartaCommunity) {
+                mensajeEspecial = procesarCartaCommunityChest(jugador, cartaCommunity);
+            }
+            break;
+            
+        case "tax":
+            if (infoCasilla.action && infoCasilla.action.money) {
+                const impuesto = Math.abs(infoCasilla.action.money);
+                const balanceActual = jugador.getBalance();
+                try {
+                    const nuevoBalance = balanceActual - impuesto;
+                    if (nuevoBalance >= 0) {
+                        jugador.setBalance(nuevoBalance);
+                        mensajeEspecial = `
+                            <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 6px; padding: 10px; color: #856404;">
+                                <div style="font-weight: bold; margin-bottom: 5px;">💰 Impuesto</div>
+                                <div style="font-size: 14px;">
+                                    ${infoCasilla.name}<br>
+                                    <strong style="color: #856404;">-$${impuesto}</strong><br>
+                                    <small>Balance anterior: $${balanceActual} → Nuevo balance: $${nuevoBalance}</small>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        throw new Error("Fondos insuficientes");
+                    }
+                } catch (error) {
+                    mensajeEspecial = `
+                        <div style="background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 6px; padding: 10px; color: #721c24;">
+                            <div style="font-weight: bold; margin-bottom: 5px;">💰 Impuesto</div>
+                            <div style="font-size: 14px;">
+                                ${infoCasilla.name}<br>
+                                <strong style="color: #dc3545;">No tienes suficiente dinero para pagar el impuesto!</strong><br>
+                                <small>Balance actual: $${balanceActual}</small>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            break;
+            
+        case "special":
+            if (infoCasilla.action) {
+                if (infoCasilla.action.money && infoCasilla.action.money > 0) {
+                    
+                } else if (infoCasilla.action.goTo === "jail") {
+                    // Ir a la cárcel
+                    jugador.setposition(10); // ID de la cárcel
+                    jugador.setInJail(true);
+                    jugador.setJailTurns(3);
+                    
+                    // Mover ficha a la cárcel
+                    let ficha = document.querySelector(`.ficha[data-id="${jugador.getNickname()}"]`);
+                    let casillaCarcel = document.getElementById("10");
+                    if (ficha && casillaCarcel) {
+                        ficha.remove();
+                        casillaCarcel.appendChild(ficha);
+                    }   
+                }
+            }
+            break;
+    }
+    
+    return mensajeEspecial;
+}
+
   function tirareldado() {
     // Dados - cambia MODO_PRUEBA a true para usar dados fijos
     const MODO_PRUEBA = true;
 
     let dado1, dado2;
     if (MODO_PRUEBA) {
-      dado1 = 1; // para pruebas
-      dado2 = 0; // para pruebas
+        dado1 = 1; // para pruebas
+        dado2 = 0; // para pruebas
     } else {
-      dado1 = Math.floor(Math.random() * 6) + 1;
-      dado2 = Math.floor(Math.random() * 6) + 1;
+        dado1 = Math.floor(Math.random() * 6) + 1;
+        dado2 = Math.floor(Math.random() * 6) + 1;
     }
 
     const numero = dado1 + dado2;
     console.log(
-      "Dados:",
-      dado1,
-      "+",
-      dado2,
-      "=",
-      numero,
-      MODO_PRUEBA ? "(MODO PRUEBA)" : ""
+        "Dados:",
+        dado1,
+        "+",
+        dado2,
+        "=",
+        numero,
+        MODO_PRUEBA ? "(MODO PRUEBA)" : ""
     );
 
     const resultado = document.getElementById("resultado");
@@ -461,31 +685,52 @@ document.addEventListener("DOMContentLoaded", function () {
     let nuevaPosicion = (posicionActual + numero) % 40; // tablero tiene ids 0-39
 
     console.log(
-      "Posición actual:",
-      posicionActual,
-      "-> Nueva posición:",
-      nuevaPosicion,
-      "| Movimiento:",
-      numero
+        "Posición actual:",
+        posicionActual,
+        "-> Nueva posición:",
+        nuevaPosicion,
+        "| Movimiento:",
+        numero
     );
+
+    // *** LÓGICA PARA DETECTAR SI PASA POR LA SALIDA ***
+    let mensajeSalida = "";
+    if (posicionActual + numero >= 40) {
+        // El jugador pasó por la salida
+        const balanceActual = jugador.getBalance();
+        const nuevoBalance = balanceActual + 200;
+        jugador.setBalance(nuevoBalance);
+        
+        mensajeSalida = `
+            <div style="background: #d4edda; border: 1px solid #c3e6cb; border-radius: 6px; padding: 10px; color: #155724; margin-bottom: 10px;">
+                <div style="font-weight: bold; margin-bottom: 5px;">🎉 ¡Pasaste por la Salida!</div>
+                <div style="font-size: 14px;">
+                    Recibes $200 por pasar por la salida<br>
+                    <small>Balance anterior: $${balanceActual} → Nuevo balance: $${nuevoBalance}</small>
+                </div>
+            </div>
+        `;
+        
+        console.log(`${jugador.getNickname()} pasó por la salida y recibió $200`);
+    }
 
     jugador.setposition(nuevaPosicion);
 
     // mover ficha al id con= nuevaPosicion
     let ficha = document.querySelector(
-      `.ficha[data-id="${jugador.getNickname()}"]`
+        `.ficha[data-id="${jugador.getNickname()}"]`
     );
     let nuevaCasilla = document.getElementById(nuevaPosicion.toString());
 
     console.log(
-      `Moviendo ficha a posición: ${nuevaPosicion}, Casilla ID: ${
-        nuevaCasilla ? nuevaCasilla.id : "no encontrada"
-      }`
+        `Moviendo ficha a posición: ${nuevaPosicion}, Casilla ID: ${
+            nuevaCasilla ? nuevaCasilla.id : "no encontrada"
+        }`
     );
 
     if (nuevaCasilla && ficha) {
-      ficha.remove(); // quitar de la casilla anterior
-      nuevaCasilla.appendChild(ficha); // poner en la nueva
+        ficha.remove(); // quitar de la casilla anterior
+        nuevaCasilla.appendChild(ficha); // poner en la nueva
     }
 
     // *** LÓGICA DE RENTA ***
@@ -494,78 +739,81 @@ document.addEventListener("DOMContentLoaded", function () {
     let mensajeRenta = "";
 
     if (duenoCasilla && duenoCasilla.getId() !== jugador.getId()) {
-      // El jugador cayó en propiedad ajena, debe pagar renta
-      const renta = calcularRenta(nuevaPosicion, duenoCasilla);
-      const infoCasilla = obtenerInfoCasilla(nuevaPosicion);
+        // El jugador cayó en propiedad ajena, debe pagar renta
+        const renta = calcularRenta(nuevaPosicion, duenoCasilla);
+        const infoCasilla = obtenerInfoCasilla(nuevaPosicion);
 
-      if (renta > 0) {
-        try {
-          const resultadoPago = jugador.payRent(renta, duenoCasilla);
+        if (renta > 0) {
+            try {
+                const resultadoPago = jugador.payRent(renta, duenoCasilla);
 
-          // Información adicional para ferrocarriles
-          let infoAdicional = "";
-          if (
-            infoCasilla.type === "railroad" ||
-            infoCasilla.name.toLowerCase().includes("ferrocarril")
-          ) {
-            const ferrocarrilesDelDueno = duenoCasilla
-              .getProperties()
-              .filter((propId) => {
-                const propInfo = obtenerInfoCasilla(propId);
-                return (
-                  propInfo &&
-                  (propInfo.type === "railroad" ||
-                    propInfo.name.toLowerCase().includes("ferrocarril"))
-                );
-              }).length;
+                // Información adicional para ferrocarriles
+                let infoAdicional = "";
+                if (
+                    infoCasilla.type === "railroad" ||
+                    infoCasilla.name.toLowerCase().includes("ferrocarril")
+                ) {
+                    const ferrocarrilesDelDueno = duenoCasilla
+                        .getProperties()
+                        .filter((propId) => {
+                            const propInfo = obtenerInfoCasilla(propId);
+                            return (
+                                propInfo &&
+                                (propInfo.type === "railroad" ||
+                                    propInfo.name.toLowerCase().includes("ferrocarril"))
+                            );
+                        }).length;
 
-            infoAdicional = `<br><small style="color: #666;">🚂 ${duenoCasilla.getNickname()} tiene ${ferrocarrilesDelDueno} ferrocarril${
-              ferrocarrilesDelDueno > 1 ? "es" : ""
-            }</small>`;
-          }
+                    infoAdicional = `<br><small style="color: #666;">🚂 ${duenoCasilla.getNickname()} tiene ${ferrocarrilesDelDueno} ferrocarril${
+                        ferrocarrilesDelDueno > 1 ? "es" : ""
+                    }</small>`;
+                }
 
-          mensajeRenta = `
-                        <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 6px; padding: 10px; color: #856404;">
-                            <div style="font-weight: bold; margin-bottom: 5px;">💰 Pago de Renta</div>
-                            <div style="font-size: 14px;">
-                                ${jugador.getNickname()} → ${duenoCasilla.getNickname()}: <strong>$${renta}</strong><br>
-                                <small style="color: #666;">Propiedad: ${
-                                  infoCasilla.name
-                                }</small>${infoAdicional}
-                            </div>
+                mensajeRenta = `
+                    <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 6px; padding: 10px; color: #856404;">
+                        <div style="font-weight: bold; margin-bottom: 5px;">💰 Pago de Renta</div>
+                        <div style="font-size: 14px;">
+                            ${jugador.getNickname()} → ${duenoCasilla.getNickname()}: <strong>$${renta}</strong><br>
+                            <small style="color: #666;">Propiedad: ${
+                                infoCasilla.name
+                            }</small>${infoAdicional}
                         </div>
-                    `;
-        } catch (error) {
-          mensajeRenta = `
-                        <div style="background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 6px; padding: 10px; color: #721c24;">
-                            <div style="font-weight: bold; margin-bottom: 5px;">⚠️ Fondos Insuficientes</div>
-                            <div style="font-size: 14px;">
-                                ${jugador.getNickname()} no puede pagar $${renta}<br>
-                                <small style="color: #666;">Propiedad: ${
-                                  infoCasilla.name
-                                }</small>
-                            </div>
+                    </div>
+                `;
+            } catch (error) {
+                mensajeRenta = `
+                    <div style="background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 6px; padding: 10px; color: #721c24;">
+                        <div style="font-weight: bold; margin-bottom: 5px;">⚠️ Fondos Insuficientes</div>
+                        <div style="font-size: 14px;">
+                            ${jugador.getNickname()} no puede pagar $${renta}<br>
+                            <small style="color: #666;">Propiedad: ${
+                                infoCasilla.name
+                            }</small>
                         </div>
-                    `;
+                    </div>
+                `;
+            }
         }
-      }
     }
+
+    // *** LÓGICA DE CASILLAS ESPECIALES ***
+    let mensajeEspecial = verificarCasillaEspecial(jugador, nuevaPosicion);
 
     // Guardar estado actualizado en localStorage
     localStorage.setItem(
-      "jugadores",
-      JSON.stringify(
-        window.jugadores.map((j) => ({
-          nickname: j.getNickname(),
-          country: j.getCountry(),
-          balance: j.getBalance(),
-          position: j.getPosition(),
-          properties: j.getProperties(),
-          inJail: j.getInJail(),
-          jailTurns: j.getJailTurns(),
-          background: j.getBackground(),
-        }))
-      )
+        "jugadores",
+        JSON.stringify(
+            window.jugadores.map((j) => ({
+                nickname: j.getNickname(),
+                country: j.getCountry(),
+                balance: j.getBalance(),
+                position: j.getPosition(),
+                properties: j.getProperties(),
+                inJail: j.getInJail(),
+                jailTurns: j.getJailTurns(),
+                background: j.getBackground(),
+            }))
+        )
     );
 
     // Actualizar tooltips de las fichas con los nuevos balances
@@ -591,13 +839,23 @@ document.addEventListener("DOMContentLoaded", function () {
                 <span><strong>$${jugador.getBalance()}</strong></span>
             </div>
             ${
-              mensajeRenta
-                ? `<div style="margin-top: 10px;">${mensajeRenta}</div>`
-                : ""
+                mensajeSalida 
+                    ? `<div style="margin-top: 10px;">${mensajeSalida}</div>` 
+                    : ""
+            }
+            ${
+                mensajeRenta
+                    ? `<div style="margin-top: 10px;">${mensajeRenta}</div>`
+                    : ""
+            }
+            ${
+                mensajeEspecial
+                    ? `<div style="margin-top: 10px;">${mensajeEspecial}</div>`
+                    : ""
             }
         </div>
-        `;
-  }
+    `;
+}
 
   // ------------------ Comprar propiedad ------------------
   document
