@@ -1,4 +1,3 @@
-// script.js - MODIFICADO
 import Player from '../model/player.js';
 
 export function generarJugadores(n) {
