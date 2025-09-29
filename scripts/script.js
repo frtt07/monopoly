@@ -1,5 +1,5 @@
 // script.js - MODIFICADO
-import Player from '../model/Player.js';
+import Player from "../model/player.js";
 
 export function generarJugadores(n) {
   console.log(`Generando ${n} jugadores...`);

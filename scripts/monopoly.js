@@ -71,14 +71,14 @@ document.addEventListener("DOMContentLoaded", function () {
                         <button id="btnTurno" class="siguienteTurno btn btn-warning" disabled>Siguiente Turno</button>
                     </div>
                     <div id="resultado"></div>
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTFPiLwxLH8BbOoX_dM4pbj070os1ZH9P3tA&s" class="d-block mx-auto" alt="" style="max-width: 120px; opacity: 0.3;">
+                    <img class="imagenMonopoly" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTFPiLwxLH8BbOoX_dM4pbj070os1ZH9P3tA&s" alt="" style="max-width: 300px">
                     <img src="/assets/imgs/interrogacion.png" alt="" class="imagenInterrogacion">
                 `;
         tablero.appendChild(centro);
         centro.style.gridRow = "2 / 11";
         centro.style.gridColumn = "2 / 11";
 
-        // ✅ Inicializamos lógica de botones
+        // Inicializamos lógica de botones
         const btnDado = document.getElementById("btnDado");
         const btnTurno = document.getElementById("btnTurno");
 
@@ -180,10 +180,10 @@ document.addEventListener("DOMContentLoaded", function () {
         `${jugador.getNickname()} (${jugador.getCountry()}) - $${jugador.getBalance()}`
       );
 
-      // 👇 asignamos el color guardado en el jugador
+      // asignamos el color guardado en el jugador
       ficha.style.backgroundColor = jugador.background;
 
-      // 👇 buscamos la casilla según su posición
+      // buscamos la casilla según su posición
       let casilla = document.getElementById(jugador.position);
       if (casilla) {
         casilla.appendChild(ficha);
