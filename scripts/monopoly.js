@@ -675,7 +675,6 @@ document.addEventListener("DOMContentLoaded", function () {
             // Ir a la cárcel
             jugador.setposition(10); // ID de la cárcel
             jugador.setInJail(true);
-            jugador.setJailTurns(3);
 
             // Mover ficha a la cárcel
             let ficha = document.querySelector(
