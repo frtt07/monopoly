@@ -131,7 +131,7 @@ export class Player {
     }
 
     if (this.balance >= precio) {
-      this.setBalance(-precio);
+      this.setBalance(this.getBalance() - precio);
 
       // Registrar propiedad
       this.addProperty(casillaId);
@@ -171,8 +171,8 @@ export class Player {
     }
 
     // Realizar la transferencia
-    this.setBalance(-amount);
-    owner.setBalance(amount);
+    this.setBalance(this.getBalance() - amount);
+    owner.setBalance(owner.getBalance() + amount);
 
     return {
       success: true,
