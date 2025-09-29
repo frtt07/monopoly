@@ -149,13 +149,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     casillaDiv.innerHTML = `
         <div>
-            <div class="casilla-color" style="background-color:${
-              data.color || "transparent"
-            }"></div>
+            <div class="casilla-color" style="background-color:${data.color || "transparent"
+      }"></div>
             <div class="casilla-nombre">${data.name}</div>
-            <div class="casilla-precio">${
-              data.price ? `$${data.price}` : ""
-            }</div>
+            <div class="casilla-precio">${data.price ? `$${data.price}` : ""
+      }</div>
         </div>
     `;
 
@@ -220,9 +218,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const jugador = window.jugadores[index];
 
       const jugadorDiv = document.createElement("div");
-      jugadorDiv.className = `card mb-3 ${
-        index === turno ? "border-primary border-2" : ""
-      }`;
+      jugadorDiv.className = `card mb-3 ${index === turno ? "border-primary border-2" : ""
+        }`;
       jugadorDiv.style.backgroundColor = jugador.getBackground();
       jugadorDiv.style.opacity = "0.95";
 
@@ -239,12 +236,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="card-body p-3">
                     <div class="d-flex align-items-center mb-2">
                         <img src="${bandera}" alt="bandera" style="width: 24px; height: 16px; margin-right: 8px">
-                        <h6 class="card-title mb-0" style="color: ${
-                          index === turno ? "#0066cc" : "#333"
-                        }; font-weight: bold;">
-                            ${
-                              index === turno ? "🎲 " : ""
-                            }${jugador.getNickname()}
+                        <h6 class="card-title mb-0" style="color: ${index === turno ? "#0066cc" : "#333"
+        }; font-weight: bold;">
+                            ${index === turno ? "🎲 " : ""
+        }${jugador.getNickname()}
                         </h6>
                     </div>
                     
@@ -263,37 +258,33 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
                     
                     <div class="mb-2">
-                        <div style="font-weight: bold; margin-bottom: 4px;">🏠 Propiedades (${
-                          jugador.getProperties().length
-                        }):</div>
+                        <div style="font-weight: bold; margin-bottom: 4px;">🏠 Propiedades (${jugador.getProperties().length
+        }):</div>
                         <div style="max-height: 100px; overflow-y: auto; font-size: 12px;">
-                            ${
-                              propiedadesNombres.length > 0
-                                ? propiedadesNombres
-                                    .map((nombre, idx) => {
-                                      const propId =
-                                        jugador.getProperties()[idx];
-                                      const esHipotecada =
-                                        jugador.isPropertyMortgaged(propId);
-                                      return esHipotecada
-                                        ? `• ${nombre} <span style="color: red; font-weight: bold;">[HIPOTECADA]</span>`
-                                        : `• ${nombre}`;
-                                    })
-                                    .join("<br>")
-                                : '<em style="color: #999;">Ninguna propiedad</em>'
-                            }
+                            ${propiedadesNombres.length > 0
+          ? propiedadesNombres
+            .map((nombre, idx) => {
+              const propId =
+                jugador.getProperties()[idx];
+              const esHipotecada =
+                jugador.isPropertyMortgaged(propId);
+              return esHipotecada
+                ? `• ${nombre} <span style="color: red; font-weight: bold;">[HIPOTECADA]</span>`
+                : `• ${nombre}`;
+            })
+            .join("<br>")
+          : '<em style="color: #999;">Ninguna propiedad</em>'
+        }
                         </div>
-                        ${
-                          jugador.getMortgagedProperties().length > 0
-                            ? `<div style="margin-top: 8px; padding: 4px; background-color: rgba(220,53,69,0.1); border-radius: 4px;">
+                        ${jugador.getMortgagedProperties().length > 0
+          ? `<div style="margin-top: 8px; padding: 4px; background-color: rgba(220,53,69,0.1); border-radius: 4px;">
                                <small style="color: #dc3545;">
-                                 🚨 Hipotecadas: ${
-                                   jugador.getMortgagedProperties().length
-                                 }
+                                 🚨 Hipotecadas: ${jugador.getMortgagedProperties().length
+          }
                                </small>
                              </div>`
-                            : ""
-                        }
+          : ""
+        }
                     </div>
                 </div>
             `;
@@ -351,7 +342,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let turno = 0;
 
   // Función para encontrar el dueño de una propiedad
-  function encontrarDuenoPropiedad(casillaId) {
+  function encontrarDueñoPropiedad(casillaId) {
     return window.jugadores.find((jugador) => jugador.tieneProperty(casillaId));
   }
 
@@ -367,7 +358,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Función para calcular la renta base de una propiedad
-  function calcularRenta(casillaId, dueno) {
+  function calcularRenta(casillaId, dueño) {
     const infoCasilla = obtenerInfoCasilla(casillaId);
 
     if (!infoCasilla) {
@@ -376,7 +367,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // *** VERIFICAR SI LA PROPIEDAD ESTÁ HIPOTECADA ***
-    if (dueno.isPropertyMortgaged(casillaId)) {
+    if (dueño.isPropertyMortgaged(casillaId)) {
       console.log("La propiedad está hipotecada, no se cobra renta");
       return 0;
     }
@@ -394,7 +385,7 @@ document.addEventListener("DOMContentLoaded", function () {
       infoCasilla.name.toLowerCase().includes("ferrocarril")
     ) {
       // Contar cuántos ferrocarriles tiene el dueño
-      const ferrocarrilesDelDueno = dueno.getProperties().filter((propId) => {
+      const ferrocarrilesDelDueño = dueño.getProperties().filter((propId) => {
         const propInfo = obtenerInfoCasilla(propId);
         return (
           propInfo &&
@@ -405,7 +396,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       console.log(
         "Es un ferrocarril. El dueño tiene",
-        ferrocarrilesDelDueno,
+        ferrocarrilesDelDueño,
         "ferrocarriles"
       );
       console.log("Estructura de rent:", infoCasilla.rent);
@@ -413,9 +404,9 @@ document.addEventListener("DOMContentLoaded", function () {
       // Usar la estructura de rent del backend: {"1": 25, "2": 50, "3": 100, "4": 200}
       if (
         infoCasilla.rent &&
-        infoCasilla.rent[ferrocarrilesDelDueno.toString()]
+        infoCasilla.rent[ferrocarrilesDelDueño.toString()]
       ) {
-        const renta = infoCasilla.rent[ferrocarrilesDelDueno.toString()];
+        const renta = infoCasilla.rent[ferrocarrilesDelDueño.toString()];
         console.log("Renta calculada para ferrocarril:", renta);
         return renta;
       }
@@ -509,8 +500,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     <div style="font-size: 14px;">
                         ${carta.description}<br>
                         <strong style="color: #28a745;">+$${Math.abs(
-                          cantidad
-                        )}</strong><br>
+          cantidad
+        )}</strong><br>
                         <small>Balance anterior: $${balanceActual} → Nuevo balance: $${nuevoBalance}</small>
                     </div>
                 </div>
@@ -526,8 +517,8 @@ document.addEventListener("DOMContentLoaded", function () {
                             <div style="font-size: 14px;">
                                 ${carta.description}<br>
                                 <strong style="color: #dc3545;">-$${Math.abs(
-                                  cantidad
-                                )}</strong><br>
+              cantidad
+            )}</strong><br>
                                 <small>Balance anterior: $${balanceActual} → Nuevo balance: $${nuevoBalance}</small>
                             </div>
                         </div>
@@ -572,8 +563,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     <div style="font-size: 14px;">
                         ${carta.description}<br>
                         <strong style="color: #17a2b8;">+$${Math.abs(
-                          cantidad
-                        )}</strong><br>
+          cantidad
+        )}</strong><br>
                         <small>Balance anterior: $${balanceActual} → Nuevo balance: $${nuevoBalance}</small>
                     </div>
                 </div>
@@ -589,8 +580,8 @@ document.addEventListener("DOMContentLoaded", function () {
                             <div style="font-size: 14px;">
                                 ${carta.description}<br>
                                 <strong style="color: #dc3545;">-$${Math.abs(
-                                  cantidad
-                                )}</strong><br>
+              cantidad
+            )}</strong><br>
                                 <small>Balance anterior: $${balanceActual} → Nuevo balance: $${nuevoBalance}</small>
                             </div>
                         </div>
@@ -705,7 +696,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function tirareldado() {
     // Dados - cambia MODO_PRUEBA a true para usar dados fijos
-    const MODO_PRUEBA = true;
+    const MODO_PRUEBA = false;
 
     let dado1, dado2;
     if (MODO_PRUEBA) {
@@ -773,8 +764,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let nuevaCasilla = document.getElementById(nuevaPosicion.toString());
 
     console.log(
-      `Moviendo ficha a posición: ${nuevaPosicion}, Casilla ID: ${
-        nuevaCasilla ? nuevaCasilla.id : "no encontrada"
+      `Moviendo ficha a posición: ${nuevaPosicion}, Casilla ID: ${nuevaCasilla ? nuevaCasilla.id : "no encontrada"
       }`
     );
 
@@ -785,17 +775,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // *** LÓGICA DE RENTA ***
     // Verificar si la casilla es propiedad de otro jugador
-    const duenoCasilla = encontrarDuenoPropiedad(nuevaPosicion);
+    const dueñoCasilla = encontrarDueñoPropiedad(nuevaPosicion);
     let mensajeRenta = "";
 
-    if (duenoCasilla && duenoCasilla.getId() !== jugador.getId()) {
+    if (dueñoCasilla && dueñoCasilla.getId() !== jugador.getId()) {
       // El jugador cayó en propiedad ajena, debe pagar renta
-      const renta = calcularRenta(nuevaPosicion, duenoCasilla);
+      const renta = calcularRenta(nuevaPosicion, dueñoCasilla);
       const infoCasilla = obtenerInfoCasilla(nuevaPosicion);
 
       if (renta > 0) {
         try {
-          const resultadoPago = jugador.payRent(renta, duenoCasilla);
+          const resultadoPago = jugador.payRent(renta, dueñoCasilla);
 
           // Información adicional para ferrocarriles
           let infoAdicional = "";
@@ -803,7 +793,7 @@ document.addEventListener("DOMContentLoaded", function () {
             infoCasilla.type === "railroad" ||
             infoCasilla.name.toLowerCase().includes("ferrocarril")
           ) {
-            const ferrocarrilesDelDueno = duenoCasilla
+            const ferrocarrilesDelDueño = dueñoCasilla
               .getProperties()
               .filter((propId) => {
                 const propInfo = obtenerInfoCasilla(propId);
@@ -814,19 +804,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
               }).length;
 
-            infoAdicional = `<br><small style="color: #666;">🚂 ${duenoCasilla.getNickname()} tiene ${ferrocarrilesDelDueno} ferrocarril${
-              ferrocarrilesDelDueno > 1 ? "es" : ""
-            }</small>`;
+            infoAdicional = `<br><small style="color: #666;">🚂 ${dueñoCasilla.getNickname()} tiene ${ferrocarrilesDelDueño} ferrocarril${ferrocarrilesDelDueño > 1 ? "es" : ""
+              }</small>`;
           }
 
           mensajeRenta = `
                     <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 6px; padding: 10px; color: #856404;">
                         <div style="font-weight: bold; margin-bottom: 5px;">💰 Pago de Renta</div>
                         <div style="font-size: 14px;">
-                            ${jugador.getNickname()} → ${duenoCasilla.getNickname()}: <strong>$${renta}</strong><br>
-                            <small style="color: #666;">Propiedad: ${
-                              infoCasilla.name
-                            }</small>${infoAdicional}
+                            ${jugador.getNickname()} → ${dueñoCasilla.getNickname()}: <strong>$${renta}</strong><br>
+                            <small style="color: #666;">Propiedad: ${infoCasilla.name
+            }</small>${infoAdicional}
                         </div>
                     </div>
                 `;
@@ -836,9 +824,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         <div style="font-weight: bold; margin-bottom: 5px;">⚠️ Fondos Insuficientes</div>
                         <div style="font-size: 14px;">
                             ${jugador.getNickname()} no puede pagar $${renta}<br>
-                            <small style="color: #666;">Propiedad: ${
-                              infoCasilla.name
-                            }</small>
+                            <small style="color: #666;">Propiedad: ${infoCasilla.name
+            }</small>
                         </div>
                     </div>
                 `;
@@ -888,21 +875,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 <span>💰 Balance:</span>
                 <span><strong>$${jugador.getBalance()}</strong></span>
             </div>
-            ${
-              mensajeSalida
-                ? `<div style="margin-top: 10px;">${mensajeSalida}</div>`
-                : ""
-            }
-            ${
-              mensajeRenta
-                ? `<div style="margin-top: 10px;">${mensajeRenta}</div>`
-                : ""
-            }
-            ${
-              mensajeEspecial
-                ? `<div style="margin-top: 10px;">${mensajeEspecial}</div>`
-                : ""
-            }
+            ${mensajeSalida
+        ? `<div style="margin-top: 10px;">${mensajeSalida}</div>`
+        : ""
+      }
+            ${mensajeRenta
+        ? `<div style="margin-top: 10px;">${mensajeRenta}</div>`
+        : ""
+      }
+            ${mensajeEspecial
+        ? `<div style="margin-top: 10px;">${mensajeEspecial}</div>`
+        : ""
+      }
         </div>
     `;
   }
@@ -980,9 +964,8 @@ document.addEventListener("DOMContentLoaded", function () {
       propiedadesNoHipotecadas.forEach((propId, index) => {
         let propiedad = encontrarPropiedadEnTablero(propId);
         if (propiedad) {
-          opciones += `${index + 1}. ${propiedad.name} (Hipoteca: $${
-            propiedad.mortgage || 0
-          })\n`;
+          opciones += `${index + 1}. ${propiedad.name} (Hipoteca: $${propiedad.mortgage || 0
+            })\n`;
         }
       });
 
@@ -1030,8 +1013,7 @@ document.addEventListener("DOMContentLoaded", function () {
         );
 
         alert(
-          `${jugador.getNickname()} hipotecó ${propiedad.name} y recibió $${
-            propiedad.mortgage
+          `${jugador.getNickname()} hipotecó ${propiedad.name} y recibió $${propiedad.mortgage
           }`
         );
 
@@ -1062,9 +1044,8 @@ document.addEventListener("DOMContentLoaded", function () {
         let propiedad = encontrarPropiedadEnTablero(propId);
         if (propiedad) {
           let costoTotal = Math.ceil(propiedad.mortgage * 1.1);
-          opciones += `${index + 1}. ${
-            propiedad.name
-          } (Costo: $${costoTotal} - Hipoteca + 10% interés)\n`;
+          opciones += `${index + 1}. ${propiedad.name
+            } (Costo: $${costoTotal} - Hipoteca + 10% interés)\n`;
         }
       });
 
@@ -1123,8 +1104,7 @@ document.addEventListener("DOMContentLoaded", function () {
         );
 
         alert(
-          `${jugador.getNickname()} deshipotecó ${
-            propiedad.name
+          `${jugador.getNickname()} deshipotecó ${propiedad.name
           } pagando $${costoTotal}`
         );
 
